@@ -1,0 +1,74 @@
+# Wiz Platform Backend Implementation Plan
+
+The goal is to build a robust, scalable backend for the Wise-inspired fintech platform. The backend will handle user authentication, multi-currency account management, international transfers, and administrative control.
+
+## User Review Required
+
+> [!IMPORTANT]
+> This plan assumes a **PostgreSQL** database with **Prisma ORM** for type-safe data access. If you prefer a different database (e.g., MongoDB), let me know before we start Phase 2.
+> [!WARNING]
+> We will use **JWT** for authentication. We need to decide if we want to store sensitive user data (like passwords) using `bcrypt` or a similar hashing algorithm.
+
+## Proposed Changes
+
+The backend will be built in five distinct phases to ensure stability and testing at each step.
+
+---
+
+### Phase 1: Foundation & Infrastructure
+Setting up the core project structure, environment, and essential middleware.
+
+- **Files to Modify/Create:**
+    - `[NEW]` [src/config/](file:///c:/Users/PC/Desktop/wiz/server/src/config/) - Configuration management (database, JWT, etc.).
+    - `[NEW]` [src/middleware/](file:///c:/Users/PC/Desktop/wiz/server/src/middleware/) - Error handling and auth middleware.
+    - `[NEW]` [src/utils/](file:///c:/Users/PC/Desktop/wiz/server/src/utils/) - Logging and response wrappers.
+
+---
+
+### Phase 2: Database Schema & Modeling (Prisma)
+Defining the data architecture for users, accounts, and transactions.
+
+- **Files to Create:**
+    - `[NEW]` [prisma/schema.prisma](file:///c:/Users/PC/Desktop/wiz/server/prisma/schema.prisma) - Defining `User`, `Account`, `Transaction`, and `Recipient` models.
+    - `[NEW]` [src/lib/prisma.ts](file:///c:/Users/PC/Desktop/wiz/server/src/lib/prisma.ts) - Prisma client singleton.
+
+---
+
+### Phase 3: Authentication & User Management
+Implementing secure login, registration, and profile management.
+
+- **Files to Create:**
+    - `[NEW]` [src/routes/auth.routes.ts](file:///c:/Users/PC/Desktop/wiz/server/src/routes/auth.routes.ts)
+    - `[NEW]` [src/controllers/auth.controller.ts](file:///c:/Users/PC/Desktop/wiz/server/src/controllers/auth.controller.ts)
+    - `[NEW]` [src/services/auth.service.ts](file:///c:/Users/PC/Desktop/wiz/server/src/services/auth.service.ts)
+
+---
+
+### Phase 4: Core Banking Logic (Accounts & Transfers)
+The heart of the platform: managing balances and processing transactions.
+
+- **Files to Create:**
+    - `[NEW]` [src/routes/account.routes.ts](file:///c:/Users/PC/Desktop/wiz/server/src/routes/account.routes.ts)
+    - `[NEW]` [src/controllers/transaction.controller.ts](file:///c:/Users/PC/Desktop/wiz/server/src/controllers/transaction.controller.ts)
+    - `[NEW]` [src/services/transfer.service.ts](file:///c:/Users/PC/Desktop/wiz/server/src/services/transfer.service.ts) - Handling currency conversion logic.
+
+---
+
+### Phase 5: Admin Dashboard & Analytics
+High-level control and data visualization for platform administrators.
+
+- **Files to Create:**
+    - `[NEW]` [src/routes/admin.routes.ts](file:///c:/Users/PC/Desktop/wiz/server/src/routes/admin.routes.ts)
+    - `[NEW]` [src/controllers/admin.controller.ts](file:///c:/Users/PC/Desktop/wiz/server/src/controllers/admin.controller.ts)
+
+---
+
+## Verification Plan
+
+### Automated Tests
+- **Unit Tests**: Testing service logic (conversion, balance validation) using `jest`.
+- **Integration Tests**: Testing API endpoints with `supertest`.
+
+### Manual Verification
+- Testing the `/health` endpoint and new routes via Postman/Thunder Client.
+- Verifying database records via Prisma Studio.
