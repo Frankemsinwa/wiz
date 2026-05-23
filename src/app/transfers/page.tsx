@@ -771,8 +771,8 @@ export default function TransfersPage() {
                 type="button"
                 onClick={() => {
                   const amtErr = validateAmount();
-                  if (amtError) {
-                    setValidationError(amtError);
+                  if (amtErr) {
+                    setValidationError(amtErr);
                     return;
                   }
                   if (!walletAddress || walletAddress.length < 26) {
