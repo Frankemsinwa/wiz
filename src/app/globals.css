@@ -1,0 +1,115 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand Colors from DESIGN.md */
+  --color-wise-green: #9fe870;
+  --color-dark-green: #163300;
+  --color-near-black: #0e0f0c;
+  
+  /* Backgrounds */
+  --color-bg-page: #fafaf7;
+  --color-bg-surface: #ffffff;
+  --color-bg-mint: #e2f6d5;
+  
+  /* Functional Colors */
+  --color-positive: #054d28;
+  --color-negative: #d03238;
+  --color-warning: #ffd11a;
+  --color-border: rgba(14, 15, 12, 0.12);
+  --color-muted: #6b6964;
+
+  /* Typography Hierarchy */
+  --font-size-mega: 96px;
+  --font-size-section: 48px;
+  --font-size-card: 22px;
+  --font-size-body: 18px;
+  --font-size-caption: 14px;
+
+  /* Spacing Base Unit (8px) */
+  --spacing-base: 8px;
+}
+
+:root {
+  --background: var(--color-bg-page);
+  --foreground: var(--color-near-black);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), -apple-system, sans-serif;
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Base Typography Adjustments */
+h1, h2, h3, h4, h5, h6 {
+  line-height: 0.85;
+  letter-spacing: -0.02em;
+  font-weight: 900;
+}
+
+.font-billboard {
+  font-weight: 900;
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+}
+
+.font-section {
+  font-size: var(--font-size-section);
+  font-weight: 900;
+  line-height: 0.85;
+  letter-spacing: -0.02em;
+}
+
+.font-card {
+  font-size: var(--font-size-card);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+/* Wise Pill Button Base Styles */
+.wise-pill {
+  @apply rounded-full transition-all duration-200 ease-[cubic-bezier(0.2,0,0,1)] font-semibold flex items-center justify-center;
+}
+
+.wise-pill:hover {
+  transform: scale(1.05);
+}
+
+.wise-pill:active {
+  transform: scale(0.98);
+}
+
+.wise-pill-primary {
+  background-color: var(--color-wise-green);
+  color: var(--color-dark-green);
+}
+
+.wise-pill-secondary {
+  background-color: var(--color-near-black);
+  color: white;
+}
+
+.wise-card {
+  background-color: var(--color-bg-surface);
+  border-radius: 24px;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 0 0 1px var(--color-border);
+  padding: 24px;
+  transition: transform 0.2s ease;
+}
+
+.wise-card:hover {
+  transform: translateY(-2px);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+}
