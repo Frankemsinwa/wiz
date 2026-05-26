@@ -56,12 +56,13 @@ export const updateUserBalanceWithId = async (req, res, next) => {
     try {
         const { id } = req.params;
         const { amount } = req.body;
-        if (!id || amount === undefined) {
+        const userId = Array.isArray(id) ? id[0] : id;
+        if (!userId || amount === undefined) {
             return next(new AppError('Please provide user id and amount!', 400));
         }
         // Find the primary account for this user
         const account = await prisma.account.findFirst({
-            where: { userId: id }
+            where: { userId: userId }
         });
         if (!account) {
             return next(new AppError('No account found for this user!', 404));
