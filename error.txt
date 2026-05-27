@@ -10,6 +10,6 @@
     at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:621:35)
     at ModuleJob.syncLink (node:internal/modules/esm/module_job:160:33) {
   code: 'ERR_MODULE_NOT_FOUND',
-  url: 'file:///var/task/server/src/utils/logger'
+  url: 'file:///var/task/server/src/utils/logger' h
 }
 Node.js process exited with exit status: 1. The logs above can help with debugging the issue.
