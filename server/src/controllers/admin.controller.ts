@@ -145,23 +145,74 @@ export const getAllUsers = async (req: Request, res: Response, next: NextFunctio
   }
 };
 
-export const updateUserBalance = async (req: Request, res: Response, next: NextFunction) => {
+
+export const getPendingTransactions = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { accountId, amount } = req.body;
-
-    if (!accountId || amount === undefined) {
-      return next(new AppError('Please provide accountId and amount!', 400));
-    }
-
-    const updatedAccount = await prisma.account.update({
-      where: { id: accountId },
-      data: { balance: amount }
+    const transactions = await prisma.transaction.findMany({
+      where: {
+        status: 'PENDING',
+        type: 'DEPOSIT'
+      },
+      include: {
+        user: { select: { name: true, email: true } },
+        account: { select: { currency: true } }
+      },
+      orderBy: { createdAt: 'desc' }
     });
 
     res.status(200).json({
       status: 'success',
-      data: { account: updatedAccount }
+      results: transactions.length,
+      data: { transactions }
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateTransactionStatus = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body; // 'COMPLETED' or 'FAILED'
+
+    if (!['COMPLETED', 'FAILED'].includes(status)) {
+      return next(new AppError('Invalid status provided!', 400));
+    }
+
+    const transaction = await prisma.transaction.findUnique({
+      where: { id },
+      include: { account: true }
+    });
+
+    if (!transaction) {
+      return next(new AppError('Transaction not found!', 404));
+    }
+
+    if (transaction.status !== 'PENDING') {
+      return next(new AppError('Transaction has already been processed!', 400));
+    }
+
+    if (status === 'COMPLETED') {
+      // Approve: Update transaction and account balance
+      await prisma.$transaction([
+        prisma.transaction.update({
+          where: { id },
+          data: { status: 'COMPLETED' }
+        }),
+        prisma.account.update({
+          where: { id: transaction.accountId },
+          data: { balance: { increment: transaction.amount } }
+        })
+      ]);
+    } else {
+      // Deny: Update transaction only
+      await prisma.transaction.update({
+        where: { id },
+        data: { status: 'FAILED' }
+      });
+    }
+
+    res.status(200).json({ status: 'success' });
   } catch (error) {
     next(error);
   }

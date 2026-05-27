@@ -1,15 +1,32 @@
-2026-05-27 04:01:46.029 [error] Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/var/task/server/src/utils/logger' imported from /var/task/server/src/services/exchange.service.js
-    at finalizeResolution (node:internal/modules/esm/resolve:281:11)
-    at moduleResolve (node:internal/modules/esm/resolve:871:10)
-    at moduleResolveWithNodePath (node:internal/modules/esm/resolve:997:14)
-    at defaultResolve (node:internal/modules/esm/resolve:1040:79)
-    at #cachedDefaultResolve (node:internal/modules/esm/loader:719:20)
-    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:736:38)
-    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:765:52)
-    at #resolve (node:internal/modules/esm/loader:701:17)
-    at ModuleLoader.getOrCreateModuleJob (node:internal/modules/esm/loader:621:35)
-    at ModuleJob.syncLink (node:internal/modules/esm/module_job:160:33) {
-  code: 'ERR_MODULE_NOT_FOUND',
-  url: 'file:///var/task/server/src/utils/logger' h
+2026-05-27 04:39:35.969 [error] ERROR 💥 PrismaClientKnownRequestError: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+Can't reach database server at 127.0.0.1:5432
+    at zr.handleRequestError (/var/task/server/node_modules/@prisma/client/runtime/client.js:65:8286)
+    at zr.handleAndLogRequestError (/var/task/server/node_modules/@prisma/client/runtime/client.js:65:7581)
+    at zr.request (/var/task/server/node_modules/@prisma/client/runtime/client.js:65:7288)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async a (/var/task/server/node_modules/@prisma/client/runtime/client.js:75:6862)
+    at async login (/vercel/path0/server/src/controllers/auth.controller.ts:60:18) {
+  code: 'P1001',
+  meta: {
+    modelName: 'User',
+    driverAdapterError: DriverAdapterError: DatabaseNotReachable
+        at PrismaPgAdapter.onError (file:///var/task/server/node_modules/@prisma/adapter-pg/dist/index.mjs:642:11)
+        at PrismaPgAdapter.performIO (file:///var/task/server/node_modules/@prisma/adapter-pg/dist/index.mjs:637:12)
+        at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+        at async PrismaPgAdapter.queryRaw (file:///var/task/server/node_modules/@prisma/adapter-pg/dist/index.mjs:568:30)
+        at async e.interpretNode (/var/task/server/node_modules/@prisma/client/runtime/client.js:11:44621)
+        at async e.interpretNode (/var/task/server/node_modules/@prisma/client/runtime/client.js:11:45065)
+        at async e.interpretNode (/var/task/server/node_modules/@prisma/client/runtime/client.js:11:46285)
+        at async e.run (/var/task/server/node_modules/@prisma/client/runtime/client.js:11:43335)
+        at async e.execute (/var/task/server/node_modules/@prisma/client/runtime/client.js:57:815)
+        at async jt.request (/var/task/server/node_modules/@prisma/client/runtime/client.js:58:2401) {
+      cause: [Object]
+    }
+  },
+  clientVersion: '7.8.0',
+  statusCode: 500,
+  status: 'error'
 }
-Node.js process exited with exit status: 1. The logs above can help with debugging the issue.

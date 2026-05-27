@@ -21,6 +21,7 @@ model User {
   accounts       Account[]
   recipients     Recipient[]
   transactions   Transaction[] @relation("UserTransactions")
+  notifications  Notification[]
 }
 
 enum Role {
@@ -85,4 +86,13 @@ model Recipient {
   transactions Transaction[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
 }

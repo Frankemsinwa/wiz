@@ -187,3 +187,19 @@ export const getTransactionHistory = async (req: Request, res: Response, next: N
     next(error);
   }
 };
+
+export const getNotifications = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const notifications = await prisma.notification.findMany({
+      where: { userId: req.user.id },
+      orderBy: { createdAt: 'desc' }
+    });
+
+    res.status(200).json({
+      status: 'success',
+      data: { notifications }
+    });
+  } catch (error) {
+    next(error);
+  }
+};

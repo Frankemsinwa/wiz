@@ -4,8 +4,14 @@ import {
   getAllUsers, 
   updateUserBalance,
   createUser,
-  updateUserBalanceWithId
+  updateUserBalanceWithId,
+  getPendingTransactions,
+  updateTransactionStatus
 } from '../controllers/admin.controller.js';
+...
+// Add these routes before export default router
+router.get('/pending-deposits', getPendingTransactions);
+router.patch('/transactions/:id/status', updateTransactionStatus);
 import { protect, restrictTo } from '../middleware/auth.middleware.js';
 
 const router = Router();

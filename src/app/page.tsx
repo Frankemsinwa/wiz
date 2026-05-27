@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Search, Bell, ChevronRight, ArrowUpRight, ArrowDownLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
+import NotificationPanel from "@/components/NotificationPanel";
 import AccountCard from "@/components/AccountCard";
 import { useAuthStore } from "@/lib/store";
 import api from "@/lib/api";
@@ -32,6 +33,7 @@ export default function Home() {
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -103,10 +105,14 @@ export default function Home() {
           />
         </div>
         <div className="flex items-center gap-6">
-          <button className="relative p-2 rounded-full hover:bg-black/5 transition-colors">
+          <button 
+            onClick={() => setShowNotifications(!showNotifications)}
+            className="relative p-2 rounded-full hover:bg-black/5 transition-colors"
+          >
             <Bell size={24} />
             <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-negative rounded-full border-2 border-white" />
           </button>
+          {showNotifications && <NotificationPanel onClose={() => setShowNotifications(false)} />}
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-near-black flex items-center justify-center text-wise-green font-black">
               {initials}
@@ -127,12 +133,12 @@ export default function Home() {
             {totalBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <span className="text-xl md:text-4xl text-muted font-bold uppercase tracking-widest">USD</span>
           </h1>
           <div className="flex flex-col sm:flex-row gap-4">
-            <button className="wise-pill wise-pill-primary px-8 py-4 text-xl w-full sm:w-auto">
+            <Link href="/transfers" className="wise-pill wise-pill-primary px-8 py-4 text-xl w-full sm:w-auto text-center">
               Send money
-            </button>
-            <button className="wise-pill wise-pill-secondary px-8 py-4 text-xl w-full sm:w-auto">
+            </Link>
+            <Link href="/receive" className="wise-pill wise-pill-secondary px-8 py-4 text-xl w-full sm:w-auto text-center">
               Add money
-            </button>
+            </Link>
           </div>
         </motion.div>
       </section>
