@@ -1,32 +1,15 @@
-2026-05-27 04:39:35.969 [error] ERROR 💥 PrismaClientKnownRequestError: 
-Invalid `prisma.user.findUnique()` invocation:
+npm.cmd run dev
 
+> server@1.0.0 dev      
+> tsx watch src/index.ts
 
-Can't reach database server at 127.0.0.1:5432
-    at zr.handleRequestError (/var/task/server/node_modules/@prisma/client/runtime/client.js:65:8286)
-    at zr.handleAndLogRequestError (/var/task/server/node_modules/@prisma/client/runtime/client.js:65:7581)
-    at zr.request (/var/task/server/node_modules/@prisma/client/runtime/client.js:65:7288)
-    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
-    at async a (/var/task/server/node_modules/@prisma/client/runtime/client.js:75:6862)
-    at async login (/vercel/path0/server/src/controllers/auth.controller.ts:60:18) {
-  code: 'P1001',
-  meta: {
-    modelName: 'User',
-    driverAdapterError: DriverAdapterError: DatabaseNotReachable
-        at PrismaPgAdapter.onError (file:///var/task/server/node_modules/@prisma/adapter-pg/dist/index.mjs:642:11)
-        at PrismaPgAdapter.performIO (file:///var/task/server/node_modules/@prisma/adapter-pg/dist/index.mjs:637:12)
-        at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
-        at async PrismaPgAdapter.queryRaw (file:///var/task/server/node_modules/@prisma/adapter-pg/dist/index.mjs:568:30)
-        at async e.interpretNode (/var/task/server/node_modules/@prisma/client/runtime/client.js:11:44621)
-        at async e.interpretNode (/var/task/server/node_modules/@prisma/client/runtime/client.js:11:45065)
-        at async e.interpretNode (/var/task/server/node_modules/@prisma/client/runtime/client.js:11:46285)
-        at async e.run (/var/task/server/node_modules/@prisma/client/runtime/client.js:11:43335)
-        at async e.execute (/var/task/server/node_modules/@prisma/client/runtime/client.js:57:815)
-        at async jt.request (/var/task/server/node_modules/@prisma/client/runtime/client.js:58:2401) {
-      cause: [Object]
-    }
-  },
-  clientVersion: '7.8.0',
-  statusCode: 500,
-  status: 'error'
-}
+C:\Users\PC\Desktop\wiz\server\src\routes\account.routes.ts:7
+  getNotifications,
+  ^
+SyntaxError: The requested module '../controllers/account.controller.js' does not provide an export named 'getNotifications'
+    at #asyncInstantiate (node:internal/modules/esm/module_job:302:21)
+    at async ModuleJob.run (node:internal/modules/esm/module_job:405:5)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.13.0

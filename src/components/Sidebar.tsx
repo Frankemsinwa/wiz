@@ -31,6 +31,7 @@ export default function Sidebar() {
 
   const adminItems = [
     { icon: Shield, label: "Dashboard", href: "/admin" },
+    { icon: ArrowLeftRight, label: "Transactions", href: "/admin/transactions" },
   ];
 
   const currentMenuItems = user.role === "ADMIN" ? adminItems : workerItems;

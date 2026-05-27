@@ -28,7 +28,17 @@ export default function AdminDashboard() {
     setIsLoading(true);
     try {
       const response = await api.get("/admin/users");
-      setUsers(response.data.data.users);
+      // Map response to expected User interface
+      const usersData = response.data.data.users.map((u: any) => ({
+        id: u.id,
+        name: u.name,
+        email: u.email,
+        role: u.role,
+        accountNumber: u.accounts?.[0]?.id || 'N/A',
+        balance: u.accounts?.[0]?.balance ? Number(u.accounts[0].balance) : 0,
+        currency: u.accounts?.[0]?.currency || 'USD'
+      }));
+      setUsers(usersData);
     } catch (error) {
       console.error("Failed to fetch users:", error);
     } finally {

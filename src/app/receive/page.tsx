@@ -76,13 +76,26 @@ export default function ReceivePage() {
       return;
     }
     setStep("submitting");
-    // Simulate API call for proof of transaction
-    setTimeout(() => {
-      setStep("select-method"); // Reset or go to success
+    try {
+      // Assuming user has at least one account; defaulting to the first one for deposit
+      if (accounts.length === 0) throw new Error("No account found");
+      
+      await api.post('/accounts/deposit', {
+        accountId: selectedAccount?.id || accounts[0].id,
+        amount: parseFloat(amount),
+        currency: 'USD',
+        reference: `BTC Deposit TX: ${txHash}`
+      });
+      
+      setStep("select-method"); 
       setAmount("");
       setTxHash("");
       alert("Transaction proof submitted! Our team will verify it shortly.");
-    }, 2000);
+    } catch (err) {
+      console.error(err);
+      setError("Failed to submit transaction proof. Please try again.");
+      setStep("deposit-details");
+    }
   };
 
   if (isLoading) {

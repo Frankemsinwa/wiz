@@ -145,6 +145,28 @@ export const getAllUsers = async (req: Request, res: Response, next: NextFunctio
   }
 };
 
+export const updateUserBalance = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { accountId, amount } = req.body;
+
+    if (!accountId || amount === undefined) {
+      return next(new AppError('Please provide accountId and amount!', 400));
+    }
+
+    const updatedAccount = await prisma.account.update({
+      where: { id: accountId },
+      data: { balance: amount }
+    });
+
+    res.status(200).json({
+      status: 'success',
+      data: { account: updatedAccount }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 
 export const getPendingTransactions = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -153,7 +175,12 @@ export const getPendingTransactions = async (req: Request, res: Response, next: 
         status: 'PENDING',
         type: 'DEPOSIT'
       },
-      include: {
+      select: {
+        id: true,
+        amount: true,
+        currency: true,
+        reference: true,
+        createdAt: true,
         user: { select: { name: true, email: true } },
         account: { select: { currency: true } }
       },

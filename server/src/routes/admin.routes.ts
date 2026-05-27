@@ -8,10 +8,6 @@ import {
   getPendingTransactions,
   updateTransactionStatus
 } from '../controllers/admin.controller.js';
-...
-// Add these routes before export default router
-router.get('/pending-deposits', getPendingTransactions);
-router.patch('/transactions/:id/status', updateTransactionStatus);
 import { protect, restrictTo } from '../middleware/auth.middleware.js';
 
 const router = Router();
@@ -19,6 +15,11 @@ const router = Router();
 // All routes are protected and restricted to ADMIN
 router.use(protect);
 router.use(restrictTo('ADMIN'));
+
+router.get('/pending-deposits', getPendingTransactions);
+router.patch('/transactions/:id/status', updateTransactionStatus);
+router.get('/users', getAllUsers);
+router.get('/stats', getStats);
 
 /**
  * @swagger

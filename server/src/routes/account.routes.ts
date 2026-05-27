@@ -4,7 +4,8 @@ import {
   createAccount, 
   transferMoney, 
   getTransactionHistory,
-  getNotifications
+  getNotifications,
+  depositMoney
 } from '../controllers/account.controller.js';
 import { protect } from '../middleware/auth.middleware.js';
 
@@ -96,6 +97,8 @@ router.post('/transfer', transferMoney);
  *         description: List of transactions
  */
 router.get('/transactions', getTransactionHistory);
+
+router.post('/deposit', depositMoney);
 
 router.get('/notifications', getNotifications);
 
