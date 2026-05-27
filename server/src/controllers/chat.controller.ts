@@ -5,8 +5,10 @@ import { AppError } from '../middleware/error.middleware.js';
 export const getMyChat = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = (req as any).user.id;
+    
+    console.log('Prisma keys:', Object.keys(prisma).filter(k => !k.startsWith('$')));
 
-    let chat = await prisma.chat.findFirst({
+    let chat = await (prisma as any).chat.findFirst({
       where: { userId },
       include: {
         messages: {

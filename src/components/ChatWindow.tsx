@@ -94,7 +94,7 @@ export default function ChatWindow({ chatId, isAdmin = false, onClose }: ChatWin
   };
 
   return (
-    <div className={`flex flex-col bg-white border border-border shadow-2xl overflow-hidden ${isAdmin ? "h-full rounded-none" : "w-[350px] h-[500px] rounded-3xl"}`}>
+    <div className={`flex flex-col bg-white border border-border shadow-2xl overflow-hidden ${isAdmin ? "h-full w-full rounded-none" : "w-[350px] h-[500px] rounded-3xl"}`}>
       {/* Header */}
       <div className="bg-near-black p-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
