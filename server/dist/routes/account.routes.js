@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getAccounts, createAccount, transferMoney, getTransactionHistory } from '../controllers/account.controller.js';
+import { getAccounts, createAccount, transferMoney, getTransactionHistory, getNotifications, depositMoney } from '../controllers/account.controller.js';
 import { protect } from '../middleware/auth.middleware.js';
 const router = Router();
 // All routes are protected
@@ -85,5 +85,7 @@ router.post('/transfer', transferMoney);
  *         description: List of transactions
  */
 router.get('/transactions', getTransactionHistory);
+router.post('/deposit', depositMoney);
+router.get('/notifications', getNotifications);
 export default router;
 //# sourceMappingURL=account.routes.js.map

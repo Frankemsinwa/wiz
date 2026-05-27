@@ -64,7 +64,7 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
 
 export const updateUserBalanceWithId = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { id } = req.params;
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
     const { amount } = req.body;
     const userId = Array.isArray(id) ? id[0] : id;
 
@@ -199,7 +199,7 @@ export const getPendingTransactions = async (req: Request, res: Response, next: 
 
 export const updateTransactionStatus = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { id } = req.params;
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
     const { status } = req.body; // 'COMPLETED' or 'FAILED'
 
     if (!['COMPLETED', 'FAILED'].includes(status)) {

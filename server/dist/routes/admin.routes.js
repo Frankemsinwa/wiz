@@ -1,10 +1,14 @@
 import { Router } from 'express';
-import { updateUserBalance, createUser, updateUserBalanceWithId } from '../controllers/admin.controller.js';
+import { getStats, getAllUsers, updateUserBalance, createUser, updateUserBalanceWithId, getPendingTransactions, updateTransactionStatus } from '../controllers/admin.controller.js';
 import { protect, restrictTo } from '../middleware/auth.middleware.js';
 const router = Router();
 // All routes are protected and restricted to ADMIN
 router.use(protect);
 router.use(restrictTo('ADMIN'));
+router.get('/pending-deposits', getPendingTransactions);
+router.patch('/transactions/:id/status', updateTransactionStatus);
+router.get('/users', getAllUsers);
+router.get('/stats', getStats);
 /**
  * @swagger
  * /admin/users:

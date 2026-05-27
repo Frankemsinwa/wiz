@@ -1,15 +1,35 @@
-npm.cmd run dev
+src/controllers/admin.controller.ts:210:16 - error TS2322: Type 'string | string[]' is not assignable to type 'string | undefined'.
+  Type 'string[]' is not assignable to type 'string'.
 
-> server@1.0.0 dev      
-> tsx watch src/index.ts
+210       where: { id },
+                   ~~
 
-C:\Users\PC\Desktop\wiz\server\src\routes\account.routes.ts:7
-  getNotifications,
-  ^
-SyntaxError: The requested module '../controllers/account.controller.js' does not provide an export named 'getNotifications'
-    at #asyncInstantiate (node:internal/modules/esm/module_job:302:21)
-    at async ModuleJob.run (node:internal/modules/esm/module_job:405:5)
-    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:660:26)
-    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+  node_modules/.prisma/client/index.d.ts:7590:5
+    7590     id?: string
+             ~~
+    The expected type comes from property 'id' which is declared here on type 'TransactionWhereUniqueInput'
 
-Node.js v24.13.0
+src/controllers/admin.controller.ts:226:20 - error TS2322: Type 'string | string[]' is not assignable to type 'string | undefined'.
+  Type 'string[]' is not assignable to type 'string'.
+
+226           where: { id },
+                       ~~
+
+  node_modules/.prisma/client/index.d.ts:7590:5
+    7590     id?: string
+             ~~
+    The expected type comes from property 'id' which is declared here on type 'TransactionWhereUniqueInput'
+
+src/controllers/admin.controller.ts:237:18 - error TS2322: Type 'string | string[]' is not assignable to type 'string | undefined'.
+  Type 'string[]' is not assignable to type 'string'.
+
+237         where: { id },
+                     ~~
+
+  node_modules/.prisma/client/index.d.ts:7590:5
+    7590     id?: string
+             ~~
+    The expected type comes from property 'id' which is declared here on type 'TransactionWhereUniqueInput'
+
+
+Found 3 errors in the same file, starting at: src/controllers/admin.controller.ts:210

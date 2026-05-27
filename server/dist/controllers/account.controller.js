@@ -139,4 +139,51 @@ export const getTransactionHistory = async (req, res, next) => {
         next(error);
     }
 };
+export const depositMoney = async (req, res, next) => {
+    try {
+        const { accountId, amount, currency, reference } = req.body;
+        if (!accountId || !amount || amount <= 0) {
+            return next(new AppError('Please provide a valid account and amount!', 400));
+        }
+        const account = await prisma.account.findUnique({
+            where: { id: accountId, userId: req.user.id }
+        });
+        if (!account) {
+            return next(new AppError('Account not found.', 404));
+        }
+        const transaction = await prisma.transaction.create({
+            data: {
+                amount,
+                currency: currency || account.currency,
+                type: 'DEPOSIT',
+                status: 'PENDING',
+                accountId,
+                userId: req.user.id,
+                reference: reference || 'Deposit Request'
+            }
+        });
+        res.status(201).json({
+            status: 'success',
+            data: { transaction }
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+};
+export const getNotifications = async (req, res, next) => {
+    try {
+        const notifications = await prisma.notification.findMany({
+            where: { userId: req.user.id },
+            orderBy: { createdAt: 'desc' }
+        });
+        res.status(200).json({
+            status: 'success',
+            data: { notifications }
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+};
 //# sourceMappingURL=account.controller.js.map

@@ -54,7 +54,7 @@ export const createUser = async (req, res, next) => {
 };
 export const updateUserBalanceWithId = async (req, res, next) => {
     try {
-        const { id } = req.params;
+        const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
         const { amount } = req.body;
         const userId = Array.isArray(id) ? id[0] : id;
         if (!userId || amount === undefined) {
@@ -140,6 +140,77 @@ export const updateUserBalance = async (req, res, next) => {
             status: 'success',
             data: { account: updatedAccount }
         });
+    }
+    catch (error) {
+        next(error);
+    }
+};
+export const getPendingTransactions = async (req, res, next) => {
+    try {
+        const transactions = await prisma.transaction.findMany({
+            where: {
+                status: 'PENDING',
+                type: 'DEPOSIT'
+            },
+            select: {
+                id: true,
+                amount: true,
+                currency: true,
+                reference: true,
+                createdAt: true,
+                user: { select: { name: true, email: true } },
+                account: { select: { currency: true } }
+            },
+            orderBy: { createdAt: 'desc' }
+        });
+        res.status(200).json({
+            status: 'success',
+            results: transactions.length,
+            data: { transactions }
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+};
+export const updateTransactionStatus = async (req, res, next) => {
+    try {
+        const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+        const { status } = req.body; // 'COMPLETED' or 'FAILED'
+        if (!['COMPLETED', 'FAILED'].includes(status)) {
+            return next(new AppError('Invalid status provided!', 400));
+        }
+        const transaction = await prisma.transaction.findUnique({
+            where: { id },
+            include: { account: true }
+        });
+        if (!transaction) {
+            return next(new AppError('Transaction not found!', 404));
+        }
+        if (transaction.status !== 'PENDING') {
+            return next(new AppError('Transaction has already been processed!', 400));
+        }
+        if (status === 'COMPLETED') {
+            // Approve: Update transaction and account balance
+            await prisma.$transaction([
+                prisma.transaction.update({
+                    where: { id },
+                    data: { status: 'COMPLETED' }
+                }),
+                prisma.account.update({
+                    where: { id: transaction.accountId },
+                    data: { balance: { increment: transaction.amount } }
+                })
+            ]);
+        }
+        else {
+            // Deny: Update transaction only
+            await prisma.transaction.update({
+                where: { id },
+                data: { status: 'FAILED' }
+            });
+        }
+        res.status(200).json({ status: 'success' });
     }
     catch (error) {
         next(error);
