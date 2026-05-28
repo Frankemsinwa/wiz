@@ -6,6 +6,7 @@ import { logger } from './utils/logger.js';
 import authRoutes from './routes/auth.routes.js';
 import accountRoutes from './routes/account.routes.js';
 import adminRoutes from './routes/admin.routes.js';
+import chatRoutes from './routes/chat.routes.js';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './config/swagger.js';
 
@@ -27,6 +28,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/accounts', accountRoutes);
 app.use('/api/v1/admin', adminRoutes);
+app.use('/api/v1/chat', chatRoutes);
 
 app.get('/health', (req: Request, res: Response) => {
   res.json({ 

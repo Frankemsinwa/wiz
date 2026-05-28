@@ -22,6 +22,27 @@ model User {
   recipients     Recipient[]
   transactions   Transaction[] @relation("UserTransactions")
   notifications  Notification[]
+  chats          Chat[]
+  sentMessages   Message[]     @relation("SentMessages")
+}
+
+model Chat {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  messages  Message[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  chatId    String
+  chat      Chat     @relation(fields: [chatId], references: [id])
+  senderId  String
+  sender    User     @relation("SentMessages", fields: [senderId], references: [id])
+  content   String
+  createdAt DateTime @default(now())
 }
 
 enum Role {
