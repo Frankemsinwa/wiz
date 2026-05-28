@@ -4,6 +4,7 @@ import "./globals.css";
 import Sidebar from "@/components/Sidebar";
 import MobileHeader from "@/components/MobileHeader";
 import { AppWrapper } from "@/components/AppWrapper";
+import ChatFAB from "@/components/ChatFAB";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -35,6 +36,7 @@ export default function RootLayout({
                 {children}
               </main>
             </div>
+            <ChatFAB />
           </div>
         </AppWrapper>
       </body>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Home, ArrowLeftRight, ArrowDownLeft, CreditCard, Users, PieChart, Settings, LogOut, Menu, X, Shield } from "lucide-react";
+import { Home, ArrowLeftRight, ArrowDownLeft, CreditCard, Users, PieChart, Settings, LogOut, Menu, X, Shield, MessageSquare } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -32,6 +32,7 @@ export default function Sidebar() {
   const adminItems = [
     { icon: Shield, label: "Dashboard", href: "/admin" },
     { icon: ArrowLeftRight, label: "Transactions", href: "/admin/transactions" },
+    { icon: MessageSquare, label: "Chat", href: "/admin/chat" },
   ];
 
   const currentMenuItems = user.role === "ADMIN" ? adminItems : workerItems;
