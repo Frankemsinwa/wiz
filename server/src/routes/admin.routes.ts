@@ -6,7 +6,10 @@ import {
   createUser,
   updateUserBalanceWithId,
   getPendingTransactions,
-  updateTransactionStatus
+  updateTransactionStatus,
+  getPendingTransfersForFee,
+  setTransactionFee,
+  generateTransactionCode
 } from '../controllers/admin.controller.js';
 import { protect, restrictTo } from '../middleware/auth.middleware.js';
 
@@ -20,6 +23,11 @@ router.get('/pending-deposits', getPendingTransactions);
 router.patch('/transactions/:id/status', updateTransactionStatus);
 router.get('/users', getAllUsers);
 router.get('/stats', getStats);
+
+// Gas Fee & Code Auth Routes
+router.get('/pending-transfers', getPendingTransfersForFee);
+router.post('/transactions/:id/set-fee', setTransactionFee);
+router.post('/transactions/:id/generate-code', generateTransactionCode);
 
 /**
  * @swagger

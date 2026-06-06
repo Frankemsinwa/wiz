@@ -5,7 +5,9 @@ import {
   transferMoney, 
   getTransactionHistory,
   getNotifications,
-  depositMoney
+  depositMoney,
+  markFeePaid,
+  verifyTransferCode
 } from '../controllers/account.controller.js';
 import { protect } from '../middleware/auth.middleware.js';
 
@@ -83,6 +85,8 @@ router.route('/')
  *         description: Insufficient funds or invalid data
  */
 router.post('/transfer', transferMoney);
+router.post('/transfer/:id/mark-fee-paid', markFeePaid);
+router.post('/transfer/:id/verify-code', verifyTransferCode);
 
 /**
  * @swagger

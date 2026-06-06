@@ -24,15 +24,16 @@ export default function Sidebar() {
     { icon: Home, label: "Home", href: "/" },
     { icon: ArrowLeftRight, label: "Send", href: "/transfers" },
     { icon: ArrowDownLeft, label: "Receive", href: "/receive" },
-    { icon: CreditCard, label: "Cards", href: "/cards" },
+    { icon: MessageSquare, label: "Messages", href: "/messages" },
     { icon: Users, label: "Recipients", href: "/recipients" },
-    { icon: PieChart, label: "Analytics", href: "/analytics" },
+    { icon: CreditCard, label: "Cards", href: "/cards" },
   ];
 
   const adminItems = [
     { icon: Shield, label: "Dashboard", href: "/admin" },
     { icon: ArrowLeftRight, label: "Transactions", href: "/admin/transactions" },
     { icon: MessageSquare, label: "Chat", href: "/admin/chat" },
+    { icon: ArrowDownLeft, label: "Transfers", href: "/admin/transfers" },
   ];
 
   const currentMenuItems = user.role === "ADMIN" ? adminItems : workerItems;
@@ -53,11 +54,10 @@ export default function Sidebar() {
               <Link
                 key={item.label}
                 href={item.href}
-                className={`flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 group ${
-                  isActive 
-                    ? "bg-wise-green text-dark-green" 
+                className={`flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 group ${isActive
+                    ? "bg-wise-green text-dark-green"
                     : "hover:bg-white/10 text-white/70 hover:text-white"
-                }`}
+                  }`}
               >
                 <Icon size={22} strokeWidth={isActive ? 3 : 2} className="transition-transform group-hover:scale-110" />
                 <span className="font-semibold text-lg">{item.label}</span>
@@ -90,16 +90,15 @@ export default function Sidebar() {
             <Link
               key={item.label}
               href={item.href}
-              className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all ${
-                isActive ? "text-wise-green" : "text-white/60"
-              }`}
+              className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all ${isActive ? "text-wise-green" : "text-white/60"
+                }`}
             >
               <Icon size={24} strokeWidth={isActive ? 3 : 2} />
               <span className="text-[10px] font-bold uppercase tracking-widest">{item.label}</span>
             </Link>
           );
         })}
-        <button 
+        <button
           onClick={() => setIsMobileMenuOpen(true)}
           className="flex flex-col items-center gap-1 p-2 text-white/60"
         >
@@ -134,9 +133,8 @@ export default function Sidebar() {
                     key={item.label}
                     href={item.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className={`flex items-center gap-6 p-4 rounded-2xl text-2xl font-black ${
-                      isActive ? "text-wise-green" : "text-white"
-                    }`}
+                    className={`flex items-center gap-6 p-4 rounded-2xl text-2xl font-black ${isActive ? "text-wise-green" : "text-white"
+                      }`}
                   >
                     <Icon size={32} strokeWidth={3} />
                     {item.label}

