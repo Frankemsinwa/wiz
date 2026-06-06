@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MessageCircle, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import ChatWindow from "./ChatWindow";
