@@ -12,7 +12,7 @@ interface Transaction {
   amount: number;
   currency: string;
   type: "TRANSFER_IN" | "TRANSFER_OUT" | "DEPOSIT" | "WITHDRAWAL";
-  status: "PENDING" | "COMPLETED" | "FAILED" | "CANCELLED";
+  status: "PENDING" | "COMPLETED" | "FAILED" | "CANCELLED" | "AWAITING_FEE" | "PENDING_FEE_PAYMENT" | "AWAITING_CODE";
   createdAt: string;
   reference?: string;
 }
