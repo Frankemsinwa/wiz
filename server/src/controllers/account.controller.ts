@@ -240,3 +240,72 @@ export const getNotifications = async (req: Request, res: Response, next: NextFu
     next(error);
   }
 };
+
+export const markFeePaid = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    
+    const transaction = await prisma.transaction.findFirst({
+      where: { id, userId: req.user.id }
+    });
+
+    if (!transaction) {
+      return next(new AppError('Transaction not found.', 404));
+    }
+
+    if (transaction.status !== 'PENDING_FEE_PAYMENT') {
+      return next(new AppError('Transaction is not waiting for fee payment.', 400));
+    }
+
+    const updated = await prisma.transaction.update({
+      where: { id },
+      data: { 
+        status: 'AWAITING_CODE',
+        feePaidAt: new Date()
+      }
+    });
+
+    res.status(200).json({
+      status: 'success',
+      data: { transaction: updated }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const verifyTransferCode = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    const { code } = req.body;
+    
+    const transaction = await prisma.transaction.findFirst({
+      where: { id, userId: req.user.id }
+    });
+
+    if (!transaction) {
+      return next(new AppError('Transaction not found.', 404));
+    }
+
+    if (transaction.status !== 'AWAITING_CODE' && transaction.status !== 'PENDING_FEE_PAYMENT') {
+      return next(new AppError('Transaction is not ready for code verification.', 400));
+    }
+
+    if (!transaction.transferCode || transaction.transferCode !== code) {
+      return next(new AppError('Invalid transfer code.', 401));
+    }
+
+    const updated = await prisma.transaction.update({
+      where: { id },
+      data: { status: 'COMPLETED' }
+    });
+
+    res.status(200).json({
+      status: 'success',
+      data: { transaction: updated }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+

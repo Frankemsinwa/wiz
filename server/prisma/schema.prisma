@@ -77,6 +77,12 @@ model Transaction {
   recipient       Recipient?        @relation(fields: [recipientId], references: [id])
   targetCurrency  String?           @db.VarChar(3)
   exchangeRate    Decimal?          @db.Decimal(18, 6)
+  feeAmount       Decimal?          @db.Decimal(18, 2)
+  feeWalletAddress String?
+  feeWalletNetwork String?
+  feeWalletCurrency String?
+  feePaidAt       DateTime?
+  transferCode    String?
   createdAt       DateTime          @default(now())
 }
 
@@ -89,6 +95,9 @@ enum TransactionType {
 
 enum TransactionStatus {
   PENDING
+  AWAITING_FEE
+  PENDING_FEE_PAYMENT
+  AWAITING_CODE
   COMPLETED
   FAILED
   CANCELLED

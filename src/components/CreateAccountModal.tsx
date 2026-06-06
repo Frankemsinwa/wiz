@@ -8,9 +8,10 @@ import api from "@/lib/api";
 interface CreateAccountModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSuccess?: () => void | Promise<void>;
 }
 
-export default function CreateAccountModal({ isOpen, onClose }: CreateAccountModalProps) {
+export default function CreateAccountModal({ isOpen, onClose, onSuccess }: CreateAccountModalProps) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -48,6 +49,7 @@ export default function CreateAccountModal({ isOpen, onClose }: CreateAccountMod
         email: credentials.email,
         pass: credentials.password
       });
+      if (onSuccess) onSuccess();
     } catch (err: any) {
       setError(err.response?.data?.message || "Failed to create sub-account");
     } finally {

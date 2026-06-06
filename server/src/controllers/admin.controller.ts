@@ -244,3 +244,84 @@ export const updateTransactionStatus = async (req: Request, res: Response, next:
     next(error);
   }
 };
+
+export const getPendingTransfersForFee = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const transactions = await prisma.transaction.findMany({
+      where: {
+        status: { in: ['AWAITING_FEE', 'PENDING_FEE_PAYMENT', 'AWAITING_CODE'] }
+      },
+      select: {
+        id: true,
+        amount: true,
+        currency: true,
+        feeAmount: true,
+        feeWalletAddress: true,
+        feeWalletNetwork: true,
+        feeWalletCurrency: true,
+        feePaidAt: true,
+        transferCode: true,
+        status: true,
+        reference: true,
+        createdAt: true,
+        user: { select: { name: true, email: true } },
+        account: { select: { currency: true } },
+        recipient: { select: { name: true, accountNumber: true, bankName: true } }
+      },
+      orderBy: { createdAt: 'desc' }
+    });
+
+    res.status(200).json({
+      status: 'success',
+      results: transactions.length,
+      data: { transactions }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const setTransactionFee = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    const { feeAmount, walletAddress, walletNetwork, walletCurrency } = req.body;
+
+    if (!feeAmount || feeAmount <= 0) {
+      return next(new AppError('Please provide a valid fee amount!', 400));
+    }
+
+    const transaction = await prisma.transaction.update({
+      where: { id },
+      data: { 
+        feeAmount,
+        feeWalletAddress: walletAddress || null,
+        feeWalletNetwork: walletNetwork || null,
+        feeWalletCurrency: walletCurrency || null,
+        status: 'PENDING_FEE_PAYMENT'
+      }
+    });
+
+    res.status(200).json({ status: 'success', data: { transaction } });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const generateTransactionCode = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+
+    // Generate random 4 digit code
+    const transferCode = Math.floor(1000 + Math.random() * 9000).toString();
+
+    const transaction = await prisma.transaction.update({
+      where: { id },
+      data: { transferCode }
+    });
+
+    res.status(200).json({ status: 'success', data: { transaction } });
+  } catch (error) {
+    next(error);
+  }
+};
+

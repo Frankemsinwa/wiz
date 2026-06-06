@@ -5,10 +5,52 @@ import { MessageCircle, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import ChatWindow from "./ChatWindow";
 import { useAuthStore } from "@/lib/store";
+import api from "@/lib/api";
 
 export default function ChatFAB() {
   const [isOpen, setIsOpen] = useState(false);
   const { user, isAuthenticated } = useAuthStore();
+  const [hasUnread, setHasUnread] = useState(false);
+
+  useEffect(() => {
+    if (!isAuthenticated || user?.role === "ADMIN") return;
+
+    const checkForUnread = async () => {
+      try {
+        const res = await api.get("/chat/my-chat");
+        const messages = res.data.data.chat?.messages;
+        if (messages && messages.length > 0) {
+          const lastMsg = messages[messages.length - 1];
+          const lastReadId = localStorage.getItem("wiz_last_read_msg");
+
+          // If the last message is from Admin and we haven't read it yet
+          if (lastMsg.sender.role === "ADMIN" && lastMsg.id !== lastReadId) {
+            setHasUnread(true);
+          }
+        }
+      } catch (error) {
+        // Silently fail polling
+      }
+    };
+
+    checkForUnread();
+    const interval = setInterval(checkForUnread, 5000);
+    return () => clearInterval(interval);
+  }, [isAuthenticated, user?.role, isOpen]);
+
+  // When opening the chat, clear the unread indicator
+  useEffect(() => {
+    if (isOpen) {
+      setHasUnread(false);
+      // Mark as read by fetching latest and saving ID
+      api.get("/chat/my-chat").then((res) => {
+        const messages = res.data.data.chat?.messages;
+        if (messages && messages.length > 0) {
+          localStorage.setItem("wiz_last_read_msg", messages[messages.length - 1].id);
+        }
+      });
+    }
+  }, [isOpen]);
 
   // Don't show for admins or if not logged in
   if (!isAuthenticated || user?.role === "ADMIN") return null;
@@ -32,9 +74,17 @@ export default function ChatFAB() {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="bg-wise-green text-dark-green p-4 rounded-full shadow-2xl flex items-center justify-center"
+        className="bg-wise-green text-dark-green p-4 rounded-full shadow-2xl flex items-center justify-center relative cursor-pointer"
       >
         {isOpen ? <X size={28} /> : <MessageCircle size={28} />}
+        
+        {/* Pulsing Red Dot for Unread Messages */}
+        {hasUnread && !isOpen && (
+          <span className="absolute top-0 right-0 flex h-4 w-4">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-4 w-4 bg-red-600 border-2 border-near-black"></span>
+          </span>
+        )}
       </motion.button>
     </div>
   );

@@ -200,13 +200,24 @@ export default function Home() {
                     <p className="text-muted font-semibold">{new Date(tx.createdAt).toLocaleDateString()}</p>
                   </div>
                 </div>
-                <div className="text-right">
+                <div className="text-right flex flex-col items-end">
                   <p className={`font-black text-lg ${
                     !isOut ? "text-positive" : "text-near-black"
                   }`}>
                     {isOut ? "-" : "+"}{Number(tx.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} {tx.currency}
                   </p>
-                  <p className="text-muted font-semibold capitalize">{tx.status.toLowerCase()}</p>
+                  
+                  {tx.status === 'PENDING_FEE_PAYMENT' ? (
+                    <Link href="/transfers" className="mt-1 px-3 py-1 bg-amber-100 hover:bg-amber-200 text-amber-800 text-[10px] font-black uppercase tracking-wider rounded-full flex items-center gap-1 transition-colors">
+                      Pay Gas Fee <ChevronRight size={12} />
+                    </Link>
+                  ) : tx.status === 'AWAITING_CODE' ? (
+                    <Link href="/transfers" className="mt-1 px-3 py-1 bg-blue-100 hover:bg-blue-200 text-blue-800 text-[10px] font-black uppercase tracking-wider rounded-full flex items-center gap-1 transition-colors">
+                      Enter Code <ChevronRight size={12} />
+                    </Link>
+                  ) : (
+                    <p className="text-muted font-semibold capitalize mt-1 text-sm">{tx.status.replace(/_/g, ' ').toLowerCase()}</p>
+                  )}
                 </div>
               </div>
             );
