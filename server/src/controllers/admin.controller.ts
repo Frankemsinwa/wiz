@@ -2,10 +2,12 @@ import { Request, Response, NextFunction } from 'express';
 import { prisma } from '../lib/prisma.js';
 import { AppError } from '../middleware/error.middleware.js';
 import bcrypt from 'bcryptjs';
+import cloudinary from '../config/cloudinary.js';
+import { env } from '../config/env.js';
 
 export const createUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { name, email, password, role, initialBalance, currency } = req.body;
+    const { name, email, password, role, initialBalance, currency, profilePic } = req.body;
 
     if (!email || !password || !name) {
       return next(new AppError('Please provide email, password and name!', 400));
@@ -27,6 +29,7 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
           email,
           name,
           password: hashedPassword,
+          profilePic: profilePic || null,
           role: (role === 'WORKER' ? 'WORKER' : role) || 'USER',
         },
       });
@@ -320,6 +323,31 @@ export const generateTransactionCode = async (req: Request, res: Response, next:
     });
 
     res.status(200).json({ status: 'success', data: { transaction } });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getCloudinarySignature = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const timestamp = Math.round(new Date().getTime() / 1000);
+    const folder = 'worker_profiles';
+    
+    const signature = cloudinary.utils.api_sign_request(
+      { timestamp, folder },
+      env.CLOUDINARY_API_SECRET
+    );
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        signature,
+        timestamp,
+        cloudName: env.CLOUDINARY_CLOUD_NAME,
+        apiKey: env.CLOUDINARY_API_KEY,
+        folder
+      }
+    });
   } catch (error) {
     next(error);
   }

@@ -14,6 +14,7 @@ model User {
   email          String        @unique
   name           String
   password       String
+  profilePic     String?
   role           Role          @default(USER)
   transactionPin String        @default("1234")
   createdAt      DateTime      @default(now())

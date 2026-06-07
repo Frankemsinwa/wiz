@@ -4,8 +4,8 @@ import { motion } from "framer-motion";
 import { Plus, CreditCard, Lock, Eye, Settings } from "lucide-react";
 
 const cards = [
-  { id: 1, type: "Digital", last4: "8821", color: "bg-near-black", textColor: "text-wise-green" },
-  { id: 2, type: "Physical", last4: "4490", color: "bg-wise-green", textColor: "text-dark-green" },
+  { id: 1, type: "Digital", last4: "8821", color: "bg-near-black", textColor: "text-amber-500" },
+  { id: 2, type: "Physical", last4: "4490", color: "bg-amber-500", textColor: "text-amber-950" },
 ];
 
 export default function CardsPage() {
@@ -56,13 +56,13 @@ export default function CardsPage() {
                 repeat: Infinity,
                 ease: "easeInOut"
               }}
-              className="aspect-[1.586/1] w-72 md:w-96 mx-auto rounded-3xl bg-near-black p-8 flex flex-col justify-between shadow-[0_20px_50px_rgba(0,0,0,0.3)] text-wise-green relative overflow-hidden mb-12"
+              className="aspect-[1.586/1] w-72 md:w-96 mx-auto rounded-3xl bg-near-black p-8 flex flex-col justify-between shadow-[0_20px_50px_rgba(0,0,0,0.3)] text-amber-500 relative overflow-hidden mb-12"
             >
               <div className="flex justify-between items-start">
-                <div className="w-12 h-12 rounded-xl bg-wise-green/10 flex items-center justify-center">
+                <div className="w-12 h-12 rounded-xl bg-amber-500/10 flex items-center justify-center">
                   <CreditCard size={24} />
                 </div>
-                <div className="bg-wise-green text-dark-green px-4 py-1 rounded-full font-black text-xs uppercase tracking-tighter">
+                <div className="bg-amber-500 text-amber-950 px-4 py-1 rounded-full font-black text-xs uppercase tracking-tighter">
                   New Era
                 </div>
               </div>
@@ -74,7 +74,7 @@ export default function CardsPage() {
 
               {/* Glass reflection */}
               <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent -translate-x-full animate-[shimmer_3s_infinite]" />
-              <div className="absolute -right-10 -bottom-10 w-40 h-40 rounded-full bg-wise-green/20 blur-[60px]" />
+              <div className="absolute -right-10 -bottom-10 w-40 h-40 rounded-full bg-amber-500/20 blur-[60px]" />
             </motion.div>
 
             {/* Floating badge */}
@@ -84,7 +84,7 @@ export default function CardsPage() {
           </div>
 
           <div className="space-y-4">
-            <h2 className="font-section text-5xl md:text-7xl tracking-tighter leading-none">The wait is <br/><span className="text-wise-green">almost over.</span></h2>
+            <h2 className="font-section text-5xl md:text-7xl tracking-tighter leading-none">The wait is <br/><span className="text-amber-500">almost over.</span></h2>
             <p className="text-xl text-muted font-bold max-w-md mx-auto leading-relaxed">
               We're perfecting our cards to give you the most seamless spending experience yet. 
             </p>

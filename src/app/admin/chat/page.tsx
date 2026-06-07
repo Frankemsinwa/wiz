@@ -56,7 +56,7 @@ export default function AdminChatPage() {
   if (isLoading && chats.length === 0) {
     return (
       <div className="h-screen flex items-center justify-center">
-        <Loader2 className="animate-spin text-wise-green" size={48} />
+        <Loader2 className="animate-spin text-amber-500" size={48} />
       </div>
     );
   }
@@ -81,11 +81,11 @@ export default function AdminChatPage() {
                 key={chat.id}
                 onClick={() => handleSelectChat(chat.id)}
                 className={`w-full text-left p-4 md:p-6 border-b border-border transition-colors hover:bg-bg-page ${
-                  selectedChatId === chat.id ? "bg-bg-mint" : ""
+                  selectedChatId === chat.id ? "bg-amber-50" : ""
                 }`}
               >
                 <div className="flex items-center gap-3 md:gap-4 mb-2">
-                  <div className="w-10 h-10 rounded-full bg-near-black flex items-center justify-center text-wise-green font-black flex-shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-near-black flex items-center justify-center text-amber-500 font-black flex-shrink-0">
                     {chat.user.name.substring(0, 2).toUpperCase()}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -124,7 +124,7 @@ export default function AdminChatPage() {
           </div>
         ) : (
           <div className="flex-1 flex flex-col items-center justify-center text-center p-6 md:p-12">
-            <div className="w-20 h-20 md:w-24 md:h-24 bg-bg-mint rounded-full flex items-center justify-center text-wise-green mb-6">
+            <div className="w-20 h-20 md:w-24 md:h-24 bg-amber-50 rounded-full flex items-center justify-center text-amber-500 mb-6">
               <MessageSquare size={40} />
             </div>
             <h2 className="text-2xl md:text-3xl font-black mb-4">No chat selected</h2>

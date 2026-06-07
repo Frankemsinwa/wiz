@@ -70,7 +70,7 @@ export default function MessagesPage() {
       >
         <div>
           <h1 className="font-section text-3xl md:text-4xl font-black text-near-black flex items-center gap-3">
-            <MessageSquare className="text-wise-green" size={36} />
+            <MessageSquare className="text-amber-500" size={36} />
             Messages
           </h1>
           <p className="text-muted font-medium mt-1">
@@ -133,7 +133,7 @@ export default function MessagesPage() {
                   <div
                     className={`p-4 rounded-[20px] text-[15px] font-medium leading-relaxed ${
                       isMe
-                        ? "bg-wise-green text-dark-green rounded-br-none shadow-sm border border-green-200"
+                        ? "bg-amber-500 text-amber-950 rounded-br-none shadow-sm border border-green-200"
                         : "bg-white border border-border text-near-black rounded-bl-none shadow-sm"
                     }`}
                   >
@@ -157,7 +157,7 @@ export default function MessagesPage() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Type your message..."
-              className="flex-1 bg-slate-50 border border-border rounded-full py-4 px-6 font-semibold focus:outline-none focus:ring-2 focus:ring-wise-green focus:border-transparent transition-all"
+              className="flex-1 bg-slate-50 border border-border rounded-full py-4 px-6 font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
             />
             <button
               type="submit"

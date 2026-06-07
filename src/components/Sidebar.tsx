@@ -42,8 +42,25 @@ export default function Sidebar() {
     <>
       {/* Desktop Sidebar */}
       <aside className="hidden md:flex w-[280px] bg-near-black h-screen sticky top-0 flex-col p-8 text-white shrink-0">
-        <div className="mb-12">
-          <h2 className="text-wise-green text-3xl font-black tracking-tighter">Wiz.</h2>
+        <div className="mb-10">
+          <div className="flex items-center gap-3 mb-8">
+            <img src="/logo.png" alt="Aureus Logo" className="h-10 w-auto" />
+            <h2 className="text-amber-500 text-3xl font-black tracking-tighter">Aureus.</h2>
+          </div>
+          
+          <div className="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/10">
+            <div className="w-12 h-12 rounded-full bg-amber-500 flex items-center justify-center text-amber-950 font-black text-xl overflow-hidden shrink-0">
+              {user.profilePic ? (
+                <img src={user.profilePic} alt={user.name} className="w-full h-full object-cover" />
+              ) : (
+                user.name.substring(0, 2).toUpperCase()
+              )}
+            </div>
+            <div className="min-w-0">
+              <p className="font-bold text-base truncate">{user.name}</p>
+              <p className="text-white/40 text-xs font-semibold truncate capitalize">{user.role.toLowerCase()}</p>
+            </div>
+          </div>
         </div>
 
         <nav className="flex flex-col gap-2 flex-1">
@@ -55,7 +72,7 @@ export default function Sidebar() {
                 key={item.label}
                 href={item.href}
                 className={`flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 group ${isActive
-                    ? "bg-wise-green text-dark-green"
+                    ? "bg-amber-500 text-amber-950"
                     : "hover:bg-white/10 text-white/70 hover:text-white"
                   }`}
               >
@@ -90,7 +107,7 @@ export default function Sidebar() {
             <Link
               key={item.label}
               href={item.href}
-              className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all ${isActive ? "text-wise-green" : "text-white/60"
+              className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all ${isActive ? "text-amber-500" : "text-white/60"
                 }`}
             >
               <Icon size={24} strokeWidth={isActive ? 3 : 2} />
@@ -118,7 +135,10 @@ export default function Sidebar() {
             className="md:hidden fixed inset-0 bg-near-black text-white z-[60] p-8 flex flex-col"
           >
             <div className="flex justify-between items-center mb-12">
-              <h2 className="text-wise-green text-3xl font-black tracking-tighter">Wiz.</h2>
+              <div className="flex items-center gap-3">
+                <img src="/logo.png" alt="Aureus Logo" className="h-8 w-auto" />
+                <h2 className="text-amber-500 text-3xl font-black tracking-tighter">Aureus.</h2>
+              </div>
               <button onClick={() => setIsMobileMenuOpen(false)} className="p-2 bg-white/10 rounded-full">
                 <X size={24} />
               </button>
@@ -133,7 +153,7 @@ export default function Sidebar() {
                     key={item.label}
                     href={item.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className={`flex items-center gap-6 p-4 rounded-2xl text-2xl font-black ${isActive ? "text-wise-green" : "text-white"
+                    className={`flex items-center gap-6 p-4 rounded-2xl text-2xl font-black ${isActive ? "text-amber-500" : "text-white"
                       }`}
                   >
                     <Icon size={32} strokeWidth={3} />

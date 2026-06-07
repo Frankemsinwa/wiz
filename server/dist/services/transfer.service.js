@@ -21,18 +21,18 @@ export const executeTransfer = async (userId, sourceAccountId, amount, targetCur
             exchangeRate = await getExchangeRate(sourceAccount.currency, targetCurrency);
             targetAmount = amount * exchangeRate;
         }
-        // 3. Deduct from source account
+        // 3. Deduct from source account to lock funds
         await tx.account.update({
             where: { id: sourceAccountId },
             data: { balance: { decrement: amount } },
         });
-        // 4. Create transaction record
+        // 4. Create transaction record with AWAITING_FEE status
         const transaction = await tx.transaction.create({
             data: {
                 amount,
                 currency: sourceAccount.currency,
                 type: TransactionType.TRANSFER_OUT,
-                status: 'COMPLETED',
+                status: 'AWAITING_FEE',
                 reference,
                 accountId: sourceAccountId,
                 userId,

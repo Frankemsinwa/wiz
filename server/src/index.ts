@@ -34,7 +34,7 @@ app.get('/health', (req: Request, res: Response) => {
   res.json({ 
     status: 'online', 
     timestamp: new Date().toISOString(),
-    service: 'Wiz Platform Backend',
+    service: 'Aureus Platform Backend',
     env: env.NODE_ENV
   });
 });

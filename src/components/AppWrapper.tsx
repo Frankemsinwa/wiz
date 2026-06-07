@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useAuthStore } from "@/lib/store";
 import { usePathname, useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
@@ -12,50 +12,66 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const [hasChecked, setHasChecked] = useState(false);
+  const initializationRef = useRef(false);
 
+  // Initial Auth Check
   useEffect(() => {
+    if (initializationRef.current) return;
+    initializationRef.current = true;
+
     const initAuth = async () => {
-      // Only check auth if we don't have it yet
-      if (!isAuthenticated && localStorage.getItem('wiz_token')) {
-        await checkAuth();
+      const token = localStorage.getItem('aureus_token');
+      if (token && !isAuthenticated) {
+        try {
+          await checkAuth();
+        } catch (error) {
+          console.error("Auth initialization failed:", error);
+        }
       }
       setHasChecked(true);
     };
     initAuth();
   }, [checkAuth, isAuthenticated]);
 
+  // Routing Logic
   useEffect(() => {
     if (!hasChecked) return;
 
+    const isPublicRoute = publicRoutes.includes(pathname);
+
     if (!isAuthenticated) {
-      if (!publicRoutes.includes(pathname)) {
-        router.push("/login");
+      if (!isPublicRoute) {
+        // Prevent loop if we're already trying to go to login
+        router.replace("/login");
       }
     } else if (user) {
-      // Handle role-based redirection
-      if (user.role === "ADMIN") {
-        // Admin should not be on non-admin routes except settings
-        if (pathname !== "/admin" && pathname !== "/settings" && !pathname.startsWith("/admin/")) {
-           router.push("/admin");
-        }
+      if (isPublicRoute) {
+        // Logged in user shouldn't see login/register
+        router.replace(user.role === "ADMIN" ? "/admin" : "/");
       } else {
-        // Regular users should not be on admin routes
-        if (pathname === "/admin" || pathname.startsWith("/admin/")) {
-          router.push("/");
+        // Role-based access control
+        if (user.role === "ADMIN") {
+          const isAdminRoute = pathname === "/admin" || pathname.startsWith("/admin/") || pathname === "/settings";
+          if (!isAdminRoute) {
+            router.replace("/admin");
+          }
+        } else {
+          const isAdminRoute = pathname === "/admin" || pathname.startsWith("/admin/");
+          if (isAdminRoute) {
+            router.replace("/");
+          }
         }
-      }
-      
-      // If user is already on login/register while authenticated, redirect them
-      if (publicRoutes.includes(pathname)) {
-        router.push(user.role === "ADMIN" ? "/admin" : "/");
       }
     }
   }, [hasChecked, isAuthenticated, pathname, router, user]);
 
-  if (isLoading || (!hasChecked && !publicRoutes.includes(pathname))) {
+  // To prevent hydration flicker and loop, we render a static loader ONLY on protected routes
+  // while we are still doing the initial check. Public routes render immediately.
+  const isPublicRoute = publicRoutes.includes(pathname);
+  if (!hasChecked && !isPublicRoute) {
     return (
       <div className="h-screen w-full flex items-center justify-center bg-bg-page">
-        <Loader2 className="animate-spin text-wise-green" size={48} />
+        <Loader2 className="animate-spin text-amber-500" size={48} />
       </div>
     );
   }

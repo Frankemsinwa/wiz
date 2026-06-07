@@ -98,10 +98,10 @@ export default function ChatWindow({ chatId, isAdmin = false, onClose }: ChatWin
       {/* Header */}
       <div className="bg-near-black p-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-wise-green flex items-center justify-center text-dark-green">
+          <div className="w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center text-amber-950">
             <User size={18} />
           </div>
-          <span className="text-white font-bold">{isAdmin ? "Customer Support" : "Wiz Support"}</span>
+          <span className="text-white font-bold">{isAdmin ? "Customer Support" : "Aureus Support"}</span>
         </div>
         {onClose && (
           <button onClick={onClose} className="text-white/70 hover:text-white transition-colors">
@@ -114,7 +114,7 @@ export default function ChatWindow({ chatId, isAdmin = false, onClose }: ChatWin
       <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-bg-page">
         {isLoading ? (
           <div className="h-full flex items-center justify-center">
-            <Loader2 className="animate-spin text-wise-green" />
+            <Loader2 className="animate-spin text-amber-500" />
           </div>
         ) : (
           <>
@@ -129,7 +129,7 @@ export default function ChatWindow({ chatId, isAdmin = false, onClose }: ChatWin
                 <div key={msg.id} className={`flex ${isMe ? "justify-end" : "justify-start"}`}>
                   <div className={`max-w-[80%] p-3 rounded-2xl font-semibold text-sm ${
                     isMe
-                      ? "bg-wise-green text-dark-green rounded-tr-none"
+                      ? "bg-amber-500 text-amber-950 rounded-tr-none"
                       : "bg-white border border-border text-near-black rounded-tl-none"
                   }`}>
                     {!isMe && <p className="text-[10px] uppercase tracking-wider opacity-60 mb-1">{msg.sender.name}</p>}
@@ -153,12 +153,12 @@ export default function ChatWindow({ chatId, isAdmin = false, onClose }: ChatWin
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           placeholder="Type a message..."
-          className="flex-1 bg-bg-page border border-border rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-wise-green font-semibold text-sm"
+          className="flex-1 bg-bg-page border border-border rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500 font-semibold text-sm"
         />
         <button
           type="submit"
           disabled={!newMessage.trim() || isSending}
-          className="bg-wise-green text-dark-green p-2 rounded-full disabled:opacity-50 hover:scale-110 transition-transform"
+          className="bg-amber-500 text-amber-950 p-2 rounded-full disabled:opacity-50 hover:scale-110 transition-transform"
         >
           {isSending ? <Loader2 size={20} className="animate-spin" /> : <Send size={20} />}
         </button>

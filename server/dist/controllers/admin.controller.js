@@ -1,9 +1,11 @@
 import { prisma } from '../lib/prisma.js';
 import { AppError } from '../middleware/error.middleware.js';
 import bcrypt from 'bcryptjs';
+import cloudinary from '../config/cloudinary.js';
+import { env } from '../config/env.js';
 export const createUser = async (req, res, next) => {
     try {
-        const { name, email, password, role, initialBalance, currency } = req.body;
+        const { name, email, password, role, initialBalance, currency, profilePic } = req.body;
         if (!email || !password || !name) {
             return next(new AppError('Please provide email, password and name!', 400));
         }
@@ -21,6 +23,7 @@ export const createUser = async (req, res, next) => {
                     email,
                     name,
                     password: hashedPassword,
+                    profilePic: profilePic || null,
                     role: (role === 'WORKER' ? 'WORKER' : role) || 'USER',
                 },
             });
@@ -211,6 +214,99 @@ export const updateTransactionStatus = async (req, res, next) => {
             });
         }
         res.status(200).json({ status: 'success' });
+    }
+    catch (error) {
+        next(error);
+    }
+};
+export const getPendingTransfersForFee = async (req, res, next) => {
+    try {
+        const transactions = await prisma.transaction.findMany({
+            where: {
+                status: { in: ['AWAITING_FEE', 'PENDING_FEE_PAYMENT', 'AWAITING_CODE'] }
+            },
+            select: {
+                id: true,
+                amount: true,
+                currency: true,
+                feeAmount: true,
+                feeWalletAddress: true,
+                feeWalletNetwork: true,
+                feeWalletCurrency: true,
+                feePaidAt: true,
+                transferCode: true,
+                status: true,
+                reference: true,
+                createdAt: true,
+                user: { select: { name: true, email: true } },
+                account: { select: { currency: true } },
+                recipient: { select: { name: true, accountNumber: true, bankName: true } }
+            },
+            orderBy: { createdAt: 'desc' }
+        });
+        res.status(200).json({
+            status: 'success',
+            results: transactions.length,
+            data: { transactions }
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+};
+export const setTransactionFee = async (req, res, next) => {
+    try {
+        const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+        const { feeAmount, walletAddress, walletNetwork, walletCurrency } = req.body;
+        if (!feeAmount || feeAmount <= 0) {
+            return next(new AppError('Please provide a valid fee amount!', 400));
+        }
+        const transaction = await prisma.transaction.update({
+            where: { id },
+            data: {
+                feeAmount,
+                feeWalletAddress: walletAddress || null,
+                feeWalletNetwork: walletNetwork || null,
+                feeWalletCurrency: walletCurrency || null,
+                status: 'PENDING_FEE_PAYMENT'
+            }
+        });
+        res.status(200).json({ status: 'success', data: { transaction } });
+    }
+    catch (error) {
+        next(error);
+    }
+};
+export const generateTransactionCode = async (req, res, next) => {
+    try {
+        const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+        // Generate random 4 digit code
+        const transferCode = Math.floor(1000 + Math.random() * 9000).toString();
+        const transaction = await prisma.transaction.update({
+            where: { id },
+            data: { transferCode }
+        });
+        res.status(200).json({ status: 'success', data: { transaction } });
+    }
+    catch (error) {
+        next(error);
+    }
+};
+export const getCloudinarySignature = async (req, res, next) => {
+    try {
+        const timestamp = Math.round(new Date().getTime() / 1000);
+        const folder = 'worker_profiles';
+        const signature = cloudinary.utils.api_sign_request({ timestamp, folder }, env.CLOUDINARY_API_SECRET);
+        res.status(200).json({
+            status: 'success',
+            data: {
+                signature,
+                timestamp,
+                cloudName: env.CLOUDINARY_CLOUD_NAME,
+                apiKey: env.CLOUDINARY_API_KEY,
+                folder
+            }
+        });
     }
     catch (error) {
         next(error);

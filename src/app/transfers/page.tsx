@@ -281,7 +281,7 @@ export default function TransfersPage() {
     return (
       <div className="h-screen w-full flex items-center justify-center bg-bg-page">
         <div className="flex flex-col items-center gap-4">
-          <Loader2 className="animate-spin text-wise-green" size={64} />
+          <Loader2 className="animate-spin text-amber-500" size={64} />
           <p className="text-muted font-bold tracking-widest text-sm uppercase">Loading secure portal...</p>
         </div>
       </div>
@@ -317,7 +317,7 @@ export default function TransfersPage() {
 
       {/* GLOBAL HEADER */}
       <header className="mb-12 text-center md:text-left">
-        <span className="text-wise-green font-bold uppercase tracking-widest text-[10px] md:text-sm mb-2 block">
+        <span className="text-amber-500 font-bold uppercase tracking-widest text-[10px] md:text-sm mb-2 block">
           Global Transfers
         </span>
         <h1 className="font-billboard text-5xl md:text-7xl">Send Money</h1>
@@ -411,10 +411,10 @@ export default function TransfersPage() {
                     setValidationError(null);
                     setStep("local-form");
                   }}
-                  className="flex flex-col items-start p-8 rounded-[24px] border-2 border-border hover:border-wise-green bg-bg-page hover:bg-bg-mint/10 text-left transition-all duration-300 group cursor-pointer"
+                  className="flex flex-col items-start p-8 rounded-[24px] border-2 border-border hover:border-amber-500 bg-bg-page hover:bg-amber-50/10 text-left transition-all duration-300 group cursor-pointer"
                 >
-                  <div className="w-14 h-14 rounded-full bg-wise-green/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                    <Building2 className="text-wise-green" size={28} />
+                  <div className="w-14 h-14 rounded-full bg-amber-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <Building2 className="text-amber-500" size={28} />
                   </div>
                   <h3 className="text-2xl font-black text-near-black mb-2 flex items-center gap-2">
                     Local Transfer <ChevronRight className="opacity-0 group-hover:opacity-100 transition-opacity" size={20} />
@@ -458,7 +458,7 @@ export default function TransfersPage() {
               className="flex flex-col gap-6"
             >
               <div>
-                <span className="text-[10px] font-bold text-wise-green uppercase tracking-widest bg-bg-mint px-3 py-1.5 rounded-full">Domestic Route</span>
+                <span className="text-[10px] font-bold text-amber-500 uppercase tracking-widest bg-amber-50 px-3 py-1.5 rounded-full">Domestic Route</span>
                 <h2 className="font-section text-3xl md:text-4xl font-black mt-3">Local bank transfer</h2>
               </div>
 
@@ -481,7 +481,7 @@ export default function TransfersPage() {
                         setSourceAccountId(e.target.value);
                         setValidationError(null);
                       }}
-                      className="w-full bg-bg-page border border-border rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-wise-green font-bold text-base cursor-pointer appearance-none"
+                      className="w-full bg-bg-page border border-border rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-amber-500 font-bold text-base cursor-pointer appearance-none"
                     >
                       {accounts.map(acc => (
                         <option key={acc.id} value={acc.id}>
@@ -503,7 +503,7 @@ export default function TransfersPage() {
                           setAmount(e.target.value);
                           setValidationError(null);
                         }}
-                        className="w-full bg-bg-page border border-border focus:border-wise-green rounded-xl py-3 pl-16 pr-4 focus:outline-none font-black text-lg"
+                        className="w-full bg-bg-page border border-border focus:border-amber-500 rounded-xl py-3 pl-16 pr-4 focus:outline-none font-black text-lg"
                       />
                     </div>
                     {sourceAccount && (
@@ -527,7 +527,7 @@ export default function TransfersPage() {
                           onClick={() => setTransferMethod(method.id)}
                           className={`flex flex-col items-center justify-center p-3 rounded-xl border cursor-pointer transition-all ${
                             transferMethod === method.id 
-                              ? "border-wise-green bg-bg-mint/20 text-dark-green font-bold"
+                              ? "border-amber-500 bg-amber-50/20 text-amber-950 font-bold"
                               : "border-border hover:border-gray-400 bg-transparent text-muted font-semibold"
                           }`}
                         >
@@ -551,7 +551,7 @@ export default function TransfersPage() {
                       placeholder="Beneficiary Account Name" 
                       value={beneficiaryName}
                       onChange={(e) => setBeneficiaryName(e.target.value)}
-                      className="w-full bg-bg-page border border-border focus:border-wise-green rounded-xl py-3 px-4 focus:outline-none font-semibold text-sm"
+                      className="w-full bg-bg-page border border-border focus:border-amber-500 rounded-xl py-3 px-4 focus:outline-none font-semibold text-sm"
                     />
                   </div>
 
@@ -561,7 +561,7 @@ export default function TransfersPage() {
                       placeholder="Account Number" 
                       value={beneficiaryAccountNumber}
                       onChange={(e) => setBeneficiaryAccountNumber(e.target.value)}
-                      className="w-full bg-bg-page border border-border focus:border-wise-green rounded-xl py-3 px-4 focus:outline-none font-semibold text-sm"
+                      className="w-full bg-bg-page border border-border focus:border-amber-500 rounded-xl py-3 px-4 focus:outline-none font-semibold text-sm"
                     />
                   </div>
 
@@ -571,7 +571,7 @@ export default function TransfersPage() {
                       placeholder="Bank Name (e.g. Chase, HSBC, Wells Fargo)" 
                       value={bankName}
                       onChange={(e) => setBankName(e.target.value)}
-                      className="w-full bg-bg-page border border-border focus:border-wise-green rounded-xl py-3 px-4 focus:outline-none font-semibold text-sm"
+                      className="w-full bg-bg-page border border-border focus:border-amber-500 rounded-xl py-3 px-4 focus:outline-none font-semibold text-sm"
                     />
                   </div>
 
@@ -581,7 +581,7 @@ export default function TransfersPage() {
                       placeholder="Description / Memo (Optional)" 
                       value={reference}
                       onChange={(e) => setReference(e.target.value)}
-                      className="w-full bg-bg-page border border-border focus:border-wise-green rounded-xl py-3 px-4 focus:outline-none font-semibold text-sm"
+                      className="w-full bg-bg-page border border-border focus:border-amber-500 rounded-xl py-3 px-4 focus:outline-none font-semibold text-sm"
                     />
                   </div>
 
@@ -595,7 +595,7 @@ export default function TransfersPage() {
                         placeholder="Enter 4-Digit PIN"
                         value={pin}
                         onChange={(e) => setPin(e.target.value.replace(/\D/g, ''))}
-                        className="w-full bg-bg-page border border-border focus:border-wise-green rounded-xl py-3 pl-12 pr-4 focus:outline-none font-black text-base tracking-[0.25em]"
+                        className="w-full bg-bg-page border border-border focus:border-amber-500 rounded-xl py-3 pl-12 pr-4 focus:outline-none font-black text-base tracking-[0.25em]"
                       />
                     </div>
                   </div>
@@ -604,9 +604,9 @@ export default function TransfersPage() {
               </div>
 
               {/* Summary and Button */}
-              <div className="bg-bg-mint/40 p-4 rounded-xl flex items-start gap-3 mt-2 border border-bg-mint">
-                <Info className="text-dark-green shrink-0 mt-0.5" size={20} />
-                <p className="text-dark-green font-semibold text-sm leading-relaxed">
+              <div className="bg-amber-50/40 p-4 rounded-xl flex items-start gap-3 mt-2 border border-amber-50">
+                <Info className="text-amber-950 shrink-0 mt-0.5" size={20} />
+                <p className="text-amber-950 font-semibold text-sm leading-relaxed">
                   Funds will be processed immediately. Instant transfers settle inside seconds, while standard bank routing takes up to 2 working days. Check your beneficiary details carefully.
                 </p>
               </div>
@@ -653,7 +653,7 @@ export default function TransfersPage() {
                   </div>
                   <div>
                     <h3 className="font-black text-near-black text-lg flex items-center gap-2">
-                      Cryptocurrency <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-full">Active</span>
+                      Cryptocurrency <span className="text-[10px] font-bold uppercase tracking-widest text-amber-600 bg-amber-100 px-2 py-0.5 rounded-full">Active</span>
                     </h3>
                     <p className="text-muted font-semibold text-xs leading-normal mt-0.5">
                       Settle globally inside seconds using BTC, ETH, BNB or USDT. Multiple layers supported.
@@ -717,7 +717,7 @@ export default function TransfersPage() {
               className="flex flex-col gap-6"
             >
               <div>
-                <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest bg-emerald-100 px-3 py-1.5 rounded-full">Active Crypto Settlement</span>
+                <span className="text-[10px] font-bold text-amber-600 uppercase tracking-widest bg-amber-100 px-3 py-1.5 rounded-full">Active Crypto Settlement</span>
                 <h1 className="font-section text-3xl md:text-4xl font-black mt-3">Cryptocurrency dispatch</h1>
               </div>
 
@@ -741,7 +741,7 @@ export default function TransfersPage() {
                         setSourceAccountId(e.target.value);
                         setValidationError(null);
                       }}
-                      className="w-full bg-bg-page border border-border rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-wise-green font-bold text-base cursor-pointer appearance-none"
+                      className="w-full bg-bg-page border border-border rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-amber-500 font-bold text-base cursor-pointer appearance-none"
                     >
                       {accounts.map(acc => (
                         <option key={acc.id} value={acc.id}>
@@ -764,7 +764,7 @@ export default function TransfersPage() {
                           }}
                           className={`py-3 rounded-xl border cursor-pointer font-black text-center transition-all ${
                             cryptoCurrency === coin 
-                              ? "border-emerald-500 bg-emerald-500/10 text-emerald-800"
+                              ? "border-amber-500 bg-amber-500/10 text-amber-800"
                               : "border-border hover:border-gray-400 bg-transparent text-muted"
                           }`}
                         >
@@ -779,7 +779,7 @@ export default function TransfersPage() {
                     <select
                       value={network}
                       onChange={(e) => setNetwork(e.target.value)}
-                      className="w-full bg-bg-page border border-border rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-wise-green font-bold text-base cursor-pointer"
+                      className="w-full bg-bg-page border border-border rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-amber-500 font-bold text-base cursor-pointer"
                     >
                       {CRYPTO_NETWORKS[cryptoCurrency]?.map(net => (
                         <option key={net} value={net}>{net}</option>
@@ -804,13 +804,13 @@ export default function TransfersPage() {
                           setAmount(e.target.value);
                           setValidationError(null);
                         }}
-                        className="w-full bg-bg-page border border-border focus:border-wise-green rounded-xl py-3 pl-16 pr-4 focus:outline-none font-black text-lg"
+                        className="w-full bg-bg-page border border-border focus:border-amber-500 rounded-xl py-3 pl-16 pr-4 focus:outline-none font-black text-lg"
                       />
                     </div>
                     {numAmount > 0 && (
-                      <p className="text-xs text-emerald-600 font-bold bg-emerald-50/50 p-2.5 rounded-lg border border-emerald-100 mt-1.5 flex items-center justify-between">
+                      <p className="text-xs text-amber-600 font-bold bg-amber-50/50 p-2.5 rounded-lg border border-amber-100 mt-1.5 flex items-center justify-between">
                         <span>Est. Output:</span>
-                        <strong className="text-emerald-800 text-sm tracking-wide">{estimatedCrypto.toFixed(6)} {cryptoCurrency}</strong>
+                        <strong className="text-amber-800 text-sm tracking-wide">{estimatedCrypto.toFixed(6)} {cryptoCurrency}</strong>
                       </p>
                     )}
                   </div>
@@ -825,7 +825,7 @@ export default function TransfersPage() {
                         setWalletAddress(e.target.value.replace(/\s+/g, ''));
                         setValidationError(null);
                       }}
-                      className="w-full bg-bg-page border border-border focus:border-wise-green rounded-xl py-3 px-4 focus:outline-none font-semibold text-xs tracking-wide"
+                      className="w-full bg-bg-page border border-border focus:border-amber-500 rounded-xl py-3 px-4 focus:outline-none font-semibold text-xs tracking-wide"
                     />
                   </div>
 
@@ -835,7 +835,7 @@ export default function TransfersPage() {
                       placeholder="Memo / Description (Optional)" 
                       value={reference}
                       onChange={(e) => setReference(e.target.value)}
-                      className="w-full bg-bg-page border border-border focus:border-wise-green rounded-xl py-3 px-4 focus:outline-none font-semibold text-sm"
+                      className="w-full bg-bg-page border border-border focus:border-amber-500 rounded-xl py-3 px-4 focus:outline-none font-semibold text-sm"
                     />
                   </div>
 
@@ -852,7 +852,7 @@ export default function TransfersPage() {
                           setPin(e.target.value.replace(/\D/g, ''));
                           setValidationError(null);
                         }}
-                        className="w-full bg-bg-page border border-border focus:border-wise-green rounded-xl py-3 pl-12 pr-4 focus:outline-none font-black text-base tracking-[0.25em]"
+                        className="w-full bg-bg-page border border-border focus:border-amber-500 rounded-xl py-3 pl-12 pr-4 focus:outline-none font-black text-base tracking-[0.25em]"
                       />
                     </div>
                   </div>
@@ -903,9 +903,9 @@ export default function TransfersPage() {
                 transition={{ duration: 0.3, type: "spring" }}
                 className="flex flex-col items-center gap-6 text-center"
               >
-                <div className="w-20 h-20 rounded-full bg-wise-green/10 flex items-center justify-center mb-2 relative">
+                <div className="w-20 h-20 rounded-full bg-amber-500/10 flex items-center justify-center mb-2 relative">
                   {currentStatus === "COMPLETED" ? (
-                    <CheckCircle2 className="text-wise-green" size={54} />
+                    <CheckCircle2 className="text-amber-500" size={54} />
                   ) : currentStatus === "FAILED" || currentStatus === "CANCELLED" ? (
                     <AlertCircle className="text-red-500" size={54} />
                   ) : (
@@ -918,20 +918,20 @@ export default function TransfersPage() {
                     {currentStatus === "COMPLETED" ? "Transfer Sent!" : "Transfer Initiated"}
                   </h1>
                   <p className="text-muted font-bold text-sm tracking-wide mt-1.5 uppercase">
-                    Status: <span className={`font-black ${currentStatus === 'COMPLETED' ? 'text-wise-green' : 'text-amber-500'}`}>{currentStatus.replace(/_/g, ' ')}</span>
+                    Status: <span className={`font-black ${currentStatus === 'COMPLETED' ? 'text-amber-500' : 'text-amber-500'}`}>{currentStatus.replace(/_/g, ' ')}</span>
                   </p>
                 </div>
 
                 {/* Progress Stepper */}
                 <div className="w-full grid grid-cols-4 gap-2 text-xs font-bold py-2 border-y border-border my-2">
                   <div className="flex flex-col items-center gap-1">
-                    <span className="w-5 h-5 rounded-full bg-wise-green text-white flex items-center justify-center">✓</span>
+                    <span className="w-5 h-5 rounded-full bg-amber-500 text-white flex items-center justify-center">✓</span>
                     <span className="text-[10px] text-near-black">1. Initiated</span>
                   </div>
                   <div className="flex flex-col items-center gap-1">
                     <span className={`w-5 h-5 rounded-full flex items-center justify-center ${
                       ['PENDING_FEE_PAYMENT', 'AWAITING_CODE', 'COMPLETED'].includes(currentStatus) 
-                        ? "bg-wise-green text-white" 
+                        ? "bg-amber-500 text-white" 
                         : "bg-amber-100 text-amber-600 animate-pulse"
                     }`}>
                       {['PENDING_FEE_PAYMENT', 'AWAITING_CODE', 'COMPLETED'].includes(currentStatus) ? "✓" : "2"}
@@ -941,7 +941,7 @@ export default function TransfersPage() {
                   <div className="flex flex-col items-center gap-1">
                     <span className={`w-5 h-5 rounded-full flex items-center justify-center ${
                       ['COMPLETED'].includes(currentStatus) 
-                        ? "bg-wise-green text-white" 
+                        ? "bg-amber-500 text-white" 
                         : currentStatus === "AWAITING_CODE"
                         ? "bg-amber-100 text-amber-600 animate-pulse"
                         : "bg-gray-100 text-gray-400"
@@ -952,7 +952,7 @@ export default function TransfersPage() {
                   </div>
                   <div className="flex flex-col items-center gap-1">
                     <span className={`w-5 h-5 rounded-full flex items-center justify-center ${
-                      currentStatus === "COMPLETED" ? "bg-wise-green text-white" : "bg-gray-100 text-gray-400"
+                      currentStatus === "COMPLETED" ? "bg-amber-500 text-white" : "bg-gray-100 text-gray-400"
                     }`}>
                       {currentStatus === "COMPLETED" ? "✓" : "4"}
                     </span>
@@ -1051,7 +1051,7 @@ export default function TransfersPage() {
 
                   <div className="flex justify-between border-b border-border pb-3 py-1">
                     <span className="text-muted font-semibold text-sm">Target Settle</span>
-                    <strong className="text-emerald-700 font-bold text-sm bg-emerald-100/50 px-3 py-0.5 rounded-full">{receiptData.method}</strong>
+                    <strong className="text-amber-700 font-bold text-sm bg-amber-100/50 px-3 py-0.5 rounded-full">{receiptData.method}</strong>
                   </div>
 
                   <div className="flex justify-between py-1">
@@ -1143,7 +1143,7 @@ export default function TransfersPage() {
                 
                 <div className="flex justify-between items-center">
                   <span className="text-muted font-semibold">Asset to Send</span>
-                  <span className="text-emerald-700 font-bold bg-emerald-100 px-3 py-1 rounded-full text-xs">
+                  <span className="text-amber-700 font-bold bg-amber-100 px-3 py-1 rounded-full text-xs">
                     {cryptoCurrency} ({network.split(" ")[0]})
                   </span>
                 </div>
@@ -1158,7 +1158,7 @@ export default function TransfersPage() {
                   <strong className="text-near-black text-base">{numAmount.toLocaleString()} {sourceAccount?.currency || "USD"}</strong>
                 </div>
 
-                <div className="flex justify-between text-emerald-800 font-bold">
+                <div className="flex justify-between text-amber-800 font-bold">
                   <span>Total Output (Crypto)</span>
                   <span className="text-base font-black">{estimatedCrypto.toFixed(6)} {cryptoCurrency}</span>
                 </div>
@@ -1177,7 +1177,7 @@ export default function TransfersPage() {
 
               </div>
 
-              <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 p-4 rounded-xl flex items-start gap-3">
+              <div className="bg-amber-50 border border-amber-200 text-amber-800 p-4 rounded-xl flex items-start gap-3">
                 <Info size={20} className="shrink-0 mt-0.5" />
                 <p className="text-[11px] font-bold leading-normal">
                   Crypto transactions are irreversible. The estimated gas fee is absorbed to secure instant network block confirmations. Settle time is typically 30-90 seconds.
@@ -1234,7 +1234,7 @@ export default function TransfersPage() {
                 value={transferCode}
                 onChange={(e) => setTransferCode(e.target.value.replace(/\D/g, ''))}
                 placeholder="0000"
-                className="w-full text-center bg-bg-page border border-border focus:border-wise-green rounded-xl py-4 text-3xl font-black tracking-[0.5em] focus:outline-none"
+                className="w-full text-center bg-bg-page border border-border focus:border-amber-500 rounded-xl py-4 text-3xl font-black tracking-[0.5em] focus:outline-none"
               />
 
               <div className="flex gap-3">
@@ -1259,7 +1259,7 @@ export default function TransfersPage() {
                     }
                   }}
                   disabled={transferCode.length < 4 || isLoading}
-                  className="flex-1 py-3 text-sm font-black bg-wise-green text-white hover:bg-emerald-600 rounded-xl flex items-center justify-center cursor-pointer disabled:opacity-50"
+                  className="flex-1 py-3 text-sm font-black bg-amber-500 text-white hover:bg-amber-600 rounded-xl flex items-center justify-center cursor-pointer disabled:opacity-50"
                 >
                   {isLoading ? <Loader2 className="animate-spin" size={18} /> : "Verify"}
                 </button>

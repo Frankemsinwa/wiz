@@ -12,7 +12,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Wiz | Money without borders",
+  title: "Aureus | Money without borders",
   description: "Personal multi-currency bank account",
 };
 
@@ -25,6 +25,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${inter.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body className="min-h-full bg-bg-page text-near-black">
         <AppWrapper>

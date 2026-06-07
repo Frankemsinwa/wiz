@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Plus } from "lucide-react";
+import { useAuthStore } from "@/lib/store";
 
 interface AccountCardProps {
   currency: string;
@@ -12,6 +13,8 @@ interface AccountCardProps {
 }
 
 export default function AccountCard({ currency, amount, symbol, label, flag }: AccountCardProps) {
+  const { showBalance } = useAuthStore();
+
   return (
     <motion.div 
       whileHover={{ scale: 1.02, y: -4 }}
@@ -31,7 +34,7 @@ export default function AccountCard({ currency, amount, symbol, label, flag }: A
             <span className="font-semibold">{label}</span>
           </div>
         </div>
-        <button className="w-8 h-8 rounded-full bg-bg-mint flex items-center justify-center text-dark-green transition-transform hover:scale-110">
+        <button className="w-8 h-8 rounded-full bg-amber-50 flex items-center justify-center text-amber-950 transition-transform hover:scale-110">
           <Plus size={18} strokeWidth={3} />
         </button>
       </div>
@@ -39,7 +42,9 @@ export default function AccountCard({ currency, amount, symbol, label, flag }: A
       <div className="flex flex-col">
         <span className="text-sm font-semibold text-muted mb-1">Balance</span>
         <div className="flex items-baseline gap-1">
-          <span className="text-2xl md:text-4xl font-black tracking-tight">{amount}</span>
+          <span className="text-2xl md:text-4xl font-black tracking-tight">
+            {showBalance ? amount : "••••••"}
+          </span>
           <span className="text-lg md:text-xl font-bold text-muted">{symbol}</span>
         </div>
       </div>

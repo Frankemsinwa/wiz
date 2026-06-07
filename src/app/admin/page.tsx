@@ -188,7 +188,7 @@ export default function AdminDashboard() {
   if (isLoading) {
     return (
       <div className="h-screen w-full flex items-center justify-center bg-bg-page">
-        <Loader2 className="animate-spin text-wise-green" size={48} />
+        <Loader2 className="animate-spin text-amber-500" size={48} />
       </div>
     );
   }
@@ -205,7 +205,7 @@ export default function AdminDashboard() {
         </div>
         <button 
           onClick={() => setIsModalOpen(true)}
-          className="wise-pill wise-pill-primary w-full md:w-auto px-6 md:px-8 py-3.5 md:py-4 text-base md:text-lg flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(159,232,112,0.3)] hover:shadow-[0_0_30px_rgba(159,232,112,0.5)]"
+          className="wise-pill wise-pill-primary w-full md:w-auto px-6 md:px-8 py-3.5 md:py-4 text-base md:text-lg flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:shadow-[0_0_30px_rgba(245,158,11,0.5)]"
         >
           <Plus size={20} className="md:w-6 md:h-6" /> New Sub-Account
         </button>
@@ -218,7 +218,7 @@ export default function AdminDashboard() {
           className="bg-near-black text-white p-6 md:p-8 rounded-[24px] md:rounded-[32px] border border-border"
         >
           <p className="text-white/60 font-bold uppercase tracking-widest text-[10px] md:text-xs mb-2">Total Managed Funds</p>
-          <h2 className="font-billboard text-3xl md:text-5xl text-wise-green truncate">
+          <h2 className="font-billboard text-3xl md:text-5xl text-amber-500 truncate">
             ${totalFunds.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </h2>
         </motion.div>
@@ -551,7 +551,7 @@ export default function AdminDashboard() {
               placeholder="Search users..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-white border border-border rounded-full py-2.5 md:py-3 pl-11 pr-4 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-wise-green transition-all font-semibold"
+              className="w-full bg-white border border-border rounded-full py-2.5 md:py-3 pl-11 pr-4 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all font-semibold"
             />
           </div>
         </div>
@@ -591,7 +591,7 @@ export default function AdminDashboard() {
                       <td className="px-4 py-4 md:p-6 text-center flex items-center justify-center gap-2">
                         <button 
                           onClick={() => handleAdjustBalance(worker.id, worker.balance || 0)}
-                          className="bg-bg-page border border-border rounded-full px-3 py-1.5 md:px-4 md:py-2 font-bold text-[10px] md:text-sm hover:bg-wise-green hover:border-wise-green hover:text-dark-green transition-colors whitespace-nowrap"
+                          className="bg-bg-page border border-border rounded-full px-3 py-1.5 md:px-4 md:py-2 font-bold text-[10px] md:text-sm hover:bg-amber-500 hover:border-amber-500 hover:text-amber-950 transition-colors whitespace-nowrap"
                         >
                           Adjust Funds
                         </button>

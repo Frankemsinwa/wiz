@@ -105,7 +105,7 @@ export default function AdminTransfersPage() {
                       placeholder="Fee ($)"
                       value={feeInputs[tx.id] || ''}
                       onChange={(e) => setFeeInputs({ ...feeInputs, [tx.id]: e.target.value })}
-                      className="border border-border p-3 rounded-xl text-sm w-full font-black focus:outline-none focus:border-wise-green bg-bg-page"
+                      className="border border-border p-3 rounded-xl text-sm w-full font-black focus:outline-none focus:border-amber-500 bg-bg-page"
                     />
                     <button 
                       onClick={() => handleSetFee(tx.id)}
@@ -133,7 +133,7 @@ export default function AdminTransfersPage() {
               {/* STATUS: AWAITING CODE */}
               {tx.status === 'AWAITING_CODE' && (
                 <div className="space-y-3">
-                  <span className="inline-block px-3 py-1 bg-emerald-100 text-emerald-800 text-[10px] font-black rounded-full uppercase tracking-widest border border-emerald-200">
+                  <span className="inline-block px-3 py-1 bg-amber-100 text-amber-800 text-[10px] font-black rounded-full uppercase tracking-widest border border-amber-200">
                     User Claims Paid
                   </span>
                   <p className="text-[11px] font-bold text-muted leading-normal">
@@ -143,15 +143,15 @@ export default function AdminTransfersPage() {
                   {!tx.transferCode ? (
                     <button 
                       onClick={() => handleGenerateCode(tx.id)}
-                      className="bg-emerald-600 text-white px-4 py-3.5 rounded-xl text-sm font-black w-full hover:bg-emerald-700 shadow-md transition-colors"
+                      className="bg-amber-600 text-white px-4 py-3.5 rounded-xl text-sm font-black w-full hover:bg-amber-700 shadow-md transition-colors"
                     >
                       Generate 4-Digit Code
                     </button>
                   ) : (
-                    <div className="bg-emerald-50 border border-emerald-200 p-4 rounded-xl text-center space-y-1 shadow-inner">
-                      <p className="text-[10px] text-emerald-700 font-black uppercase tracking-widest">Code Generated</p>
-                      <p className="text-4xl font-black text-emerald-900 tracking-[0.3em] py-2">{tx.transferCode}</p>
-                      <p className="text-[11px] text-emerald-700 pt-1 font-bold">Copy this code and send it to the user.</p>
+                    <div className="bg-amber-50 border border-amber-200 p-4 rounded-xl text-center space-y-1 shadow-inner">
+                      <p className="text-[10px] text-amber-700 font-black uppercase tracking-widest">Code Generated</p>
+                      <p className="text-4xl font-black text-amber-900 tracking-[0.3em] py-2">{tx.transferCode}</p>
+                      <p className="text-[11px] text-amber-700 pt-1 font-bold">Copy this code and send it to the user.</p>
                     </div>
                   )}
                 </div>
