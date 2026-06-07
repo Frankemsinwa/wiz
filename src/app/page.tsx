@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Search, Bell, ChevronRight, ArrowUpRight, ArrowDownLeft, Loader2 } from "lucide-react";
+import { Search, Bell, ChevronRight, ArrowUpRight, ArrowDownLeft, Loader2, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import NotificationPanel from "@/components/NotificationPanel";
 import AccountCard from "@/components/AccountCard";
@@ -29,7 +29,7 @@ interface Transaction {
 }
 
 export default function Home() {
-  const { user } = useAuthStore();
+  const { user, showBalance, toggleBalanceVisibility } = useAuthStore();
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -59,7 +59,7 @@ export default function Home() {
   if (!user || isLoading) {
     return (
       <div className="h-screen w-full flex items-center justify-center">
-        <Loader2 className="animate-spin text-wise-green" size={48} />
+        <Loader2 className="animate-spin text-amber-500" size={48} />
       </div>
     );
   }
@@ -101,7 +101,7 @@ export default function Home() {
           <input 
             type="text" 
             placeholder="Search transactions..." 
-            className="w-full bg-white border border-border rounded-full py-3 pl-12 pr-6 focus:outline-none focus:ring-2 focus:ring-wise-green transition-all font-semibold"
+            className="w-full bg-white border border-border rounded-full py-3 pl-12 pr-6 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all font-semibold"
           />
         </div>
         <div className="flex items-center gap-6">
@@ -114,7 +114,7 @@ export default function Home() {
           </button>
           {showNotifications && <NotificationPanel onClose={() => setShowNotifications(false)} />}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-near-black flex items-center justify-center text-wise-green font-black">
+            <div className="w-10 h-10 rounded-full bg-near-black flex items-center justify-center text-amber-500 font-black">
               {initials}
             </div>
           </div>
@@ -128,9 +128,29 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <span className="text-muted font-bold uppercase tracking-widest text-[10px] md:text-sm mb-2 md:mb-4 block text-center md:text-left">Total Balance (Calculated)</span>
+          <div className="flex flex-col md:flex-row items-center md:items-end justify-between mb-4 md:mb-8 gap-4">
+            <div className="text-center md:text-left">
+              <span className="text-amber-500 font-bold uppercase tracking-widest text-[10px] md:text-sm mb-2 block">Welcome back, {user.name}</span>
+              <div className="flex items-center justify-center md:justify-start gap-4">
+                <span className="text-muted font-bold uppercase tracking-widest text-[10px] md:text-sm">Total Balance</span>
+                <button 
+                  onClick={toggleBalanceVisibility}
+                  className="p-1.5 hover:bg-black/5 rounded-full transition-colors text-muted"
+                  title={showBalance ? "Hide balance" : "Show balance"}
+                >
+                  {showBalance ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+            </div>
+          </div>
+
           <h1 className="font-billboard mb-8 flex flex-col md:flex-row items-center md:items-baseline gap-1 md:gap-4 text-center md:text-left text-5xl sm:text-7xl md:text-8xl break-words">
-            {totalBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <span className="text-xl md:text-4xl text-muted font-bold uppercase tracking-widest">USD</span>
+            {showBalance ? (
+              totalBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+            ) : (
+              "••••••"
+            )} 
+            <span className="text-xl md:text-4xl text-muted font-bold uppercase tracking-widest">USD</span>
           </h1>
           <div className="flex flex-col sm:flex-row gap-4">
             <Link href="/transfers" className="wise-pill wise-pill-primary px-8 py-4 text-xl w-full sm:w-auto text-center">
@@ -147,7 +167,7 @@ export default function Home() {
       <section className="mb-16">
         <div className="flex items-center justify-between mb-8">
           <h2 className="font-section text-3xl">Accounts</h2>
-          <button className="text-wise-green font-bold flex items-center gap-1 hover:underline">
+          <button className="text-amber-500 font-bold flex items-center gap-1 hover:underline">
             View all <ChevronRight size={20} />
           </button>
         </div>
@@ -191,7 +211,7 @@ export default function Home() {
               >
                 <div className="flex items-center gap-4">
                   <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                    !isOut ? "bg-bg-mint text-positive" : "bg-red-50 text-negative"
+                    !isOut ? "bg-amber-50 text-positive" : "bg-red-50 text-negative"
                   }`}>
                     {!isOut ? <ArrowDownLeft size={24} /> : <ArrowUpRight size={24} />}
                   </div>

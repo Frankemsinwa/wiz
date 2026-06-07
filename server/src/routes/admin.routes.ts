@@ -9,7 +9,8 @@ import {
   updateTransactionStatus,
   getPendingTransfersForFee,
   setTransactionFee,
-  generateTransactionCode
+  generateTransactionCode,
+  getCloudinarySignature
 } from '../controllers/admin.controller.js';
 import { protect, restrictTo } from '../middleware/auth.middleware.js';
 
@@ -28,6 +29,7 @@ router.get('/stats', getStats);
 router.get('/pending-transfers', getPendingTransfersForFee);
 router.post('/transactions/:id/set-fee', setTransactionFee);
 router.post('/transactions/:id/generate-code', generateTransactionCode);
+router.get('/cloudinary-signature', getCloudinarySignature);
 
 /**
  * @swagger

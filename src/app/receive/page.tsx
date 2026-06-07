@@ -101,7 +101,7 @@ export default function ReceivePage() {
   if (isLoading) {
     return (
       <div className="h-screen w-full flex items-center justify-center">
-        <Loader2 className="animate-spin text-wise-green" size={48} />
+        <Loader2 className="animate-spin text-amber-500" size={48} />
       </div>
     );
   }
@@ -126,7 +126,7 @@ export default function ReceivePage() {
             <div className="grid grid-cols-1 gap-4">
               <button 
                 onClick={() => setStep("enter-amount")}
-                className="wise-card bg-white p-8 flex items-center justify-between group hover:border-wise-green transition-all"
+                className="wise-card bg-white p-8 flex items-center justify-between group hover:border-amber-500 transition-all"
               >
                 <div className="flex items-center gap-6">
                   <div className="w-16 h-16 rounded-2xl bg-orange-100 flex items-center justify-center text-orange-500">
@@ -137,7 +137,7 @@ export default function ReceivePage() {
                     <p className="text-muted font-bold">Fast, global, and decentralized.</p>
                   </div>
                 </div>
-                <div className="w-12 h-12 rounded-full border border-border flex items-center justify-center group-hover:bg-wise-green group-hover:text-dark-green transition-all">
+                <div className="w-12 h-12 rounded-full border border-border flex items-center justify-center group-hover:bg-amber-500 group-hover:text-amber-950 transition-all">
                   <ArrowRight size={24} />
                 </div>
               </button>
@@ -229,9 +229,9 @@ export default function ReceivePage() {
                       <p className="font-mono text-lg break-all font-bold flex-1 select-all">{BTC_ADDRESS}</p>
                       <button 
                         onClick={handleCopy}
-                        className="p-3 bg-white shadow-sm border border-border rounded-xl hover:bg-wise-green transition-all"
+                        className="p-3 bg-white shadow-sm border border-border rounded-xl hover:bg-amber-500 transition-all"
                       >
-                        {copied ? <Check size={20} className="text-dark-green" /> : <Copy size={20} />}
+                        {copied ? <Check size={20} className="text-amber-950" /> : <Copy size={20} />}
                       </button>
                     </div>
                   </div>
@@ -258,7 +258,7 @@ export default function ReceivePage() {
                 {/* Proof of Transaction */}
                 <div className="wise-card bg-white p-8">
                   <div className="flex items-center gap-3 mb-6">
-                    <Hash className="text-wise-green" size={24} />
+                    <Hash className="text-amber-500" size={24} />
                     <h3 className="font-bold text-xl">Proof of transaction</h3>
                   </div>
                   <p className="text-muted font-bold mb-4">Paste your transaction hash (TXID) below to speed up the verification process.</p>
@@ -271,7 +271,7 @@ export default function ReceivePage() {
                         setTxHash(e.target.value);
                         setError(null);
                       }}
-                      className={`w-full bg-bg-page border ${error ? 'border-negative' : 'border-border'} rounded-2xl py-4 px-6 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-wise-green transition-all`}
+                      className={`w-full bg-bg-page border ${error ? 'border-negative' : 'border-border'} rounded-2xl py-4 px-6 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all`}
                     />
                     {error && <p className="text-negative text-sm font-bold flex items-center gap-1"><AlertCircle size={14} /> {error}</p>}
                     <button 
@@ -287,7 +287,7 @@ export default function ReceivePage() {
               {/* QR Code Side */}
               <div className="lg:col-span-2 space-y-6">
                 <div className="wise-card bg-near-black text-white p-10 flex flex-col items-center text-center">
-                  <div className="bg-white p-4 rounded-[32px] mb-8 shadow-[0_0_40px_rgba(159,232,112,0.3)]">
+                  <div className="bg-white p-4 rounded-[32px] mb-8 shadow-[0_0_40px_rgba(245,158,11,0.3)]">
                     <QRCodeSVG 
                       value={BTC_ADDRESS} 
                       size={180}
@@ -297,13 +297,13 @@ export default function ReceivePage() {
                   </div>
                   <h3 className="font-bold text-2xl mb-4 tracking-tight">Scan QR to pay</h3>
                   <p className="text-white/60 font-medium mb-8 leading-relaxed">Use any Bitcoin wallet (Coinbase, Trust, Exodus) to complete your deposit.</p>
-                  <button className="flex items-center gap-2 text-wise-green font-black hover:underline">
+                  <button className="flex items-center gap-2 text-amber-500 font-black hover:underline">
                     View on Blockchain <ExternalLink size={18} />
                   </button>
                 </div>
 
                 <div className="wise-card bg-white p-6 flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-bg-mint flex items-center justify-center text-positive">
+                  <div className="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-positive">
                     <Loader2 className="animate-spin" size={20} />
                   </div>
                   <p className="text-sm font-bold text-muted">Waiting for network broadcast...</p>
@@ -322,7 +322,7 @@ export default function ReceivePage() {
             className="flex-1 flex flex-col items-center justify-center text-center gap-8"
           >
             <div className="relative">
-              <Loader2 className="animate-spin text-wise-green" size={80} />
+              <Loader2 className="animate-spin text-amber-500" size={80} />
               <div className="absolute inset-0 flex items-center justify-center">
                 <Bitcoin size={32} className="text-near-black" />
               </div>

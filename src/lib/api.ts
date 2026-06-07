@@ -12,7 +12,7 @@ const api = axios.create({
 // Add a request interceptor to add the auth token to every request
 api.interceptors.request.use(
   (config) => {
-    const token = typeof window !== 'undefined' ? localStorage.getItem('wiz_token') : null;
+    const token = typeof window !== 'undefined' ? localStorage.getItem('aureus_token') : null;
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -29,8 +29,11 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       if (typeof window !== 'undefined') {
-        localStorage.removeItem('wiz_token');
-        window.location.href = '/login';
+        localStorage.removeItem('aureus_token');
+        // Only redirect if not already on the login page to avoid loops
+        if (window.location.pathname !== '/login') {
+          window.location.replace('/login');
+        }
       }
     }
     return Promise.reject(error);

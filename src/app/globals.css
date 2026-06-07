@@ -1,15 +1,15 @@
 @import "tailwindcss";
 
 @theme {
-  /* Brand Colors from DESIGN.md */
-  --color-wise-green: #9fe870;
-  --color-dark-green: #163300;
+  /* Brand Colors updated to Aureus Gold */
+  --color-wise-green: #d4af37; /* Aureus Gold */
+  --color-dark-green: #3d2b00; /* Dark Gold/Brown */
   --color-near-black: #0e0f0c;
   
   /* Backgrounds */
   --color-bg-page: #fafaf7;
   --color-bg-surface: #ffffff;
-  --color-bg-mint: #e2f6d5;
+  --color-bg-mint: #fff9e6; /* Subtle Gold Tint */
   
   /* Functional Colors */
   --color-positive: #054d28;

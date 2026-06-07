@@ -5,9 +5,9 @@ const options: swaggerJsdoc.Options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'Wiz Platform API',
+      title: 'Aureus Platform API',
       version: '1.0.0',
-      description: 'API documentation for the Wiz Platform - International Transfers & Multi-currency Accounts',
+      description: 'API documentation for the Aureus Platform - International Transfers & Multi-currency Accounts',
     },
     servers: [
       {

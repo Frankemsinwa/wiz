@@ -159,7 +159,7 @@ export default function UserTransactionsPage() {
                 value={transferCode}
                 onChange={(e) => setTransferCode(e.target.value.replace(/\D/g, ''))}
                 placeholder="0000"
-                className="w-full text-center bg-bg-page border border-border focus:border-wise-green rounded-xl py-4 text-3xl font-black tracking-[0.5em] focus:outline-none"
+                className="w-full text-center bg-bg-page border border-border focus:border-amber-500 rounded-xl py-4 text-3xl font-black tracking-[0.5em] focus:outline-none"
               />
 
               <div className="flex gap-3">
@@ -185,7 +185,7 @@ export default function UserTransactionsPage() {
                     }
                   }}
                   disabled={transferCode.length < 4 || actionLoading}
-                  className="flex-1 py-3 text-sm font-black bg-wise-green text-white hover:bg-emerald-600 rounded-xl flex items-center justify-center cursor-pointer disabled:opacity-50"
+                  className="flex-1 py-3 text-sm font-black bg-amber-500 text-white hover:bg-amber-600 rounded-xl flex items-center justify-center cursor-pointer disabled:opacity-50"
                 >
                   {actionLoading ? <Loader2 className="animate-spin" size={18} /> : "Verify"}
                 </button>

@@ -35,7 +35,7 @@ export default function Login() {
     <div className="fixed inset-0 bg-near-black z-50 flex items-center justify-center p-6">
       {/* Premium Background Accents */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-[20%] -right-[10%] w-[50%] h-[50%] bg-wise-green/10 rounded-full blur-[120px]" />
+        <div className="absolute -top-[20%] -right-[10%] w-[50%] h-[50%] bg-amber-500/10 rounded-full blur-[120px]" />
         <div className="absolute -bottom-[20%] -left-[10%] w-[50%] h-[50%] bg-white/5 rounded-full blur-[100px]" />
       </div>
 
@@ -45,7 +45,8 @@ export default function Login() {
         className="w-full max-w-md bg-white rounded-[32px] p-8 md:p-10 shadow-2xl relative z-10"
       >
         <div className="mb-12 text-center">
-          <h1 className="text-wise-green text-5xl font-black tracking-tighter mb-4">Wiz.</h1>
+          <img src="/logo.png" alt="Aureus Logo" className="h-20 w-auto mx-auto mb-6 drop-shadow-[0_0_15px_rgba(245,158,11,0.3)]" />
+          <h1 className="text-amber-500 text-5xl font-black tracking-tighter mb-4">Aureus.</h1>
           <p className="text-muted font-bold text-lg">Money without borders</p>
         </div>
 
@@ -62,13 +63,13 @@ export default function Login() {
           
           <div className="space-y-2">
             <label className="text-near-black font-bold ml-1">Email Address</label>
-            <div className="relative">
+            <div className="relative" suppressHydrationWarning>
               <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" size={20} />
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-bg-page border border-border rounded-2xl py-4 pl-12 pr-4 focus:outline-none focus:ring-2 focus:ring-wise-green font-bold text-lg transition-all"
+                className="w-full bg-bg-page border border-border rounded-2xl py-4 pl-12 pr-4 focus:outline-none focus:ring-2 focus:ring-amber-500 font-bold text-lg transition-all"
                 placeholder="Enter email address"
                 required
               />
@@ -77,13 +78,13 @@ export default function Login() {
 
           <div className="space-y-2">
             <label className="text-near-black font-bold ml-1">Password</label>
-            <div className="relative">
+            <div className="relative" suppressHydrationWarning>
               <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" size={20} />
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-bg-page border border-border rounded-2xl py-4 pl-12 pr-4 focus:outline-none focus:ring-2 focus:ring-wise-green font-bold text-lg transition-all"
+                className="w-full bg-bg-page border border-border rounded-2xl py-4 pl-12 pr-4 focus:outline-none focus:ring-2 focus:ring-amber-500 font-bold text-lg transition-all"
                 placeholder="••••••••"
                 required
               />
@@ -104,7 +105,7 @@ export default function Login() {
         </form>
 
         <p className="text-center text-muted font-semibold mt-8 text-sm">
-          Secured by Wiz Enterprise Encryption
+          Secured by Aureus Enterprise Encryption
         </p>
       </motion.div>
     </div>

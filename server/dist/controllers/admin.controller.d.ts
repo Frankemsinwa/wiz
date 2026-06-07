@@ -6,4 +6,8 @@ export declare const getAllUsers: (req: Request, res: Response, next: NextFuncti
 export declare const updateUserBalance: (req: Request, res: Response, next: NextFunction) => Promise<void>;
 export declare const getPendingTransactions: (req: Request, res: Response, next: NextFunction) => Promise<void>;
 export declare const updateTransactionStatus: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const getPendingTransfersForFee: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const setTransactionFee: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const generateTransactionCode: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const getCloudinarySignature: (req: Request, res: Response, next: NextFunction) => Promise<void>;
 //# sourceMappingURL=admin.controller.d.ts.map

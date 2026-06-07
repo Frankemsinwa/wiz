@@ -5,4 +5,6 @@ export declare const transferMoney: (req: Request, res: Response, next: NextFunc
 export declare const getTransactionHistory: (req: Request, res: Response, next: NextFunction) => Promise<void>;
 export declare const depositMoney: (req: Request, res: Response, next: NextFunction) => Promise<void>;
 export declare const getNotifications: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const markFeePaid: (req: Request, res: Response, next: NextFunction) => Promise<void>;
+export declare const verifyTransferCode: (req: Request, res: Response, next: NextFunction) => Promise<void>;
 //# sourceMappingURL=account.controller.d.ts.map

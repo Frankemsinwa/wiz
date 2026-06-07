@@ -29,7 +29,7 @@ export default function SettingsPage() {
               className="wise-card flex items-center justify-between hover:bg-black/5 cursor-pointer group"
             >
               <div className="flex items-center gap-6">
-                <div className="w-14 h-14 rounded-2xl bg-bg-mint flex items-center justify-center text-dark-green group-hover:scale-110 transition-transform">
+                <div className="w-14 h-14 rounded-2xl bg-amber-50 flex items-center justify-center text-amber-950 group-hover:scale-110 transition-transform">
                   <Icon size={28} />
                 </div>
                 <div>

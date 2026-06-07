@@ -21,7 +21,7 @@ export default function ChatFAB() {
         const messages = res.data.data.chat?.messages;
         if (messages && messages.length > 0) {
           const lastMsg = messages[messages.length - 1];
-          const lastReadId = localStorage.getItem("wiz_last_read_msg");
+          const lastReadId = localStorage.getItem("aureus_last_read_msg");
 
           // If the last message is from Admin and we haven't read it yet
           if (lastMsg.sender.role === "ADMIN" && lastMsg.id !== lastReadId) {
@@ -46,7 +46,7 @@ export default function ChatFAB() {
       api.get("/chat/my-chat").then((res) => {
         const messages = res.data.data.chat?.messages;
         if (messages && messages.length > 0) {
-          localStorage.setItem("wiz_last_read_msg", messages[messages.length - 1].id);
+          localStorage.setItem("aureus_last_read_msg", messages[messages.length - 1].id);
         }
       });
     }
@@ -74,7 +74,7 @@ export default function ChatFAB() {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="bg-wise-green text-dark-green p-4 rounded-full shadow-2xl flex items-center justify-center relative cursor-pointer"
+        className="bg-amber-500 text-amber-950 p-4 rounded-full shadow-2xl flex items-center justify-center relative cursor-pointer"
       >
         {isOpen ? <X size={28} /> : <MessageCircle size={28} />}
         

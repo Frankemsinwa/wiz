@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, User, DollarSign, Loader2, Shield, Copy, Check } from "lucide-react";
+import { X, User, DollarSign, Loader2, Shield, Copy, Check, Camera, Image as ImageIcon } from "lucide-react";
 import api from "@/lib/api";
 
 interface CreateAccountModalProps {
@@ -17,6 +17,8 @@ export default function CreateAccountModal({ isOpen, onClose, onSuccess }: Creat
   const [password, setPassword] = useState("");
   const [balance, setBalance] = useState("");
   const [currency, setCurrency] = useState("USD");
+  const [profilePic, setProfilePic] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [copied, setCopied] = useState<string | null>(null);
@@ -26,6 +28,49 @@ export default function CreateAccountModal({ isOpen, onClose, onSuccess }: Creat
     email: string,
     pass: string
   } | null>(null);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    setError("");
+
+    try {
+      // 1. Get signature from backend
+      const sigResponse = await api.get("/admin/cloudinary-signature");
+      const { signature, timestamp, cloudName, apiKey, folder } = sigResponse.data.data;
+
+      // 2. Upload to Cloudinary
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("api_key", apiKey);
+      formData.append("timestamp", timestamp);
+      formData.append("signature", signature);
+      formData.append("folder", folder);
+
+      const uploadResponse = await fetch(
+        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      const data = await uploadResponse.json();
+      if (data.secure_url) {
+        setProfilePic(data.secure_url);
+      } else {
+        throw new Error("Upload failed");
+      }
+    } catch (err) {
+      setError("Failed to upload image. Please try again.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,7 +84,8 @@ export default function CreateAccountModal({ isOpen, onClose, onSuccess }: Creat
         password,
         role: "WORKER",
         initialBalance: parseFloat(balance) || 0,
-        currency
+        currency,
+        profilePic
       });
       
       const { user: newUser, account, credentials } = response.data.data;
@@ -69,6 +115,7 @@ export default function CreateAccountModal({ isOpen, onClose, onSuccess }: Creat
     setPassword("");
     setBalance("");
     setCurrency("USD");
+    setProfilePic(null);
     setError("");
     setSuccessData(null);
     onClose();
@@ -118,7 +165,7 @@ export default function CreateAccountModal({ isOpen, onClose, onSuccess }: Creat
                 <div className="relative group">
                   <label className="text-muted font-bold text-[10px] uppercase tracking-widest block mb-0.5">Account ID</label>
                   <p className="font-mono text-sm font-black break-all pr-8">{successData.account}</p>
-                  <button onClick={() => handleCopy(successData.account, 'id')} className="absolute right-0 bottom-0 p-1 text-muted hover:text-wise-green">
+                  <button onClick={() => handleCopy(successData.account, 'id')} className="absolute right-0 bottom-0 p-1 text-muted hover:text-amber-500">
                     {copied === 'id' ? <Check size={16} /> : <Copy size={16} />}
                   </button>
                 </div>
@@ -126,14 +173,14 @@ export default function CreateAccountModal({ isOpen, onClose, onSuccess }: Creat
                 <div className="relative group">
                   <label className="text-muted font-bold text-[10px] uppercase tracking-widest block mb-0.5">Email Address</label>
                   <p className="font-bold text-lg pr-8">{successData.email}</p>
-                  <button onClick={() => handleCopy(successData.email, 'email')} className="absolute right-0 bottom-1 p-1 text-muted hover:text-wise-green">
+                  <button onClick={() => handleCopy(successData.email, 'email')} className="absolute right-0 bottom-1 p-1 text-muted hover:text-amber-500">
                     {copied === 'email' ? <Check size={16} /> : <Copy size={16} />}
                   </button>
                 </div>
                 <div className="relative group">
                   <label className="text-muted font-bold text-[10px] uppercase tracking-widest block mb-0.5">Password</label>
                   <p className="font-mono font-black text-lg tracking-wider pr-8">{successData.pass}</p>
-                  <button onClick={() => handleCopy(successData.pass, 'pass')} className="absolute right-0 bottom-1 p-1 text-muted hover:text-wise-green">
+                  <button onClick={() => handleCopy(successData.pass, 'pass')} className="absolute right-0 bottom-1 p-1 text-muted hover:text-amber-500">
                     {copied === 'pass' ? <Check size={16} /> : <Copy size={16} />}
                   </button>
                 </div>
@@ -148,6 +195,35 @@ export default function CreateAccountModal({ isOpen, onClose, onSuccess }: Creat
             </motion.div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Profile Pic Upload */}
+              <div className="flex flex-col items-center gap-3 mb-6">
+                <div 
+                  onClick={() => fileInputRef.current?.click()}
+                  className="w-24 h-24 rounded-full bg-bg-page border-2 border-dashed border-border flex items-center justify-center cursor-pointer hover:border-amber-500 transition-all relative overflow-hidden group"
+                >
+                  {profilePic ? (
+                    <img src={profilePic} alt="Preview" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="flex flex-col items-center text-muted group-hover:text-amber-500">
+                      {isUploading ? <Loader2 className="animate-spin" size={24} /> : <Camera size={24} />}
+                      <span className="text-[10px] font-bold mt-1">Upload Photo</span>
+                    </div>
+                  )}
+                  {profilePic && !isUploading && (
+                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Camera className="text-white" size={20} />
+                    </div>
+                  )}
+                </div>
+                <input 
+                  type="file" 
+                  ref={fileInputRef} 
+                  onChange={handleImageUpload} 
+                  className="hidden" 
+                  accept="image/*"
+                />
+              </div>
+
               <div className="space-y-1.5">
                 <label className="text-near-black font-bold text-sm ml-1">Full Name</label>
                 <div className="relative">
@@ -156,7 +232,7 @@ export default function CreateAccountModal({ isOpen, onClose, onSuccess }: Creat
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full bg-bg-page border border-border rounded-2xl py-3.5 pl-11 pr-4 focus:outline-none focus:ring-2 focus:ring-wise-green font-bold text-base"
+                    className="w-full bg-bg-page border border-border rounded-2xl py-3.5 pl-11 pr-4 focus:outline-none focus:ring-2 focus:ring-amber-500 font-bold text-base"
                     placeholder="e.g. John Doe"
                     required
                   />
@@ -169,8 +245,8 @@ export default function CreateAccountModal({ isOpen, onClose, onSuccess }: Creat
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-bg-page border border-border rounded-2xl py-3.5 px-4 focus:outline-none focus:ring-2 focus:ring-wise-green font-bold text-base"
-                  placeholder="worker@wiz.com"
+                  className="w-full bg-bg-page border border-border rounded-2xl py-3.5 px-4 focus:outline-none focus:ring-2 focus:ring-amber-500 font-bold text-base"
+                  placeholder="worker@aureus.com"
                   required
                 />
               </div>
@@ -181,7 +257,7 @@ export default function CreateAccountModal({ isOpen, onClose, onSuccess }: Creat
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-bg-page border border-border rounded-2xl py-3.5 px-4 focus:outline-none focus:ring-2 focus:ring-wise-green font-bold text-base"
+                  className="w-full bg-bg-page border border-border rounded-2xl py-3.5 px-4 focus:outline-none focus:ring-2 focus:ring-amber-500 font-bold text-base"
                   placeholder="••••••••"
                   required
                 />
@@ -195,7 +271,7 @@ export default function CreateAccountModal({ isOpen, onClose, onSuccess }: Creat
                     type="number"
                     value={balance}
                     onChange={(e) => setBalance(e.target.value)}
-                    className="w-full bg-bg-page border border-border rounded-2xl py-3.5 pl-11 pr-24 focus:outline-none focus:ring-2 focus:ring-wise-green font-bold text-base"
+                    className="w-full bg-bg-page border border-border rounded-2xl py-3.5 pl-11 pr-24 focus:outline-none focus:ring-2 focus:ring-amber-500 font-bold text-base"
                     placeholder="0.00"
                     min="0"
                     step="0.01"

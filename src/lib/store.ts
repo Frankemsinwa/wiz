@@ -7,6 +7,7 @@ interface User {
   name: string;
   email: string;
   role: string;
+  profilePic?: string | null;
 }
 
 interface AuthState {
@@ -15,10 +16,12 @@ interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
+  showBalance: boolean;
   login: (credentials: any) => Promise<void>;
   register: (userData: any) => Promise<void>;
   logout: () => void;
   checkAuth: () => Promise<void>;
+  toggleBalanceVisibility: () => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -29,6 +32,7 @@ export const useAuthStore = create<AuthState>()(
       isAuthenticated: false,
       isLoading: false,
       error: null,
+      showBalance: true,
 
       login: async (credentials) => {
         set({ isLoading: true, error: null });
@@ -36,7 +40,7 @@ export const useAuthStore = create<AuthState>()(
           const response = await api.post('/auth/login', credentials);
           const { token, data } = response.data;
           
-          localStorage.setItem('wiz_token', token);
+          localStorage.setItem('aureus_token', token);
           set({ 
             user: data.user, 
             token, 
@@ -58,7 +62,7 @@ export const useAuthStore = create<AuthState>()(
           const response = await api.post('/auth/register', userData);
           const { token, data } = response.data;
           
-          localStorage.setItem('wiz_token', token);
+          localStorage.setItem('aureus_token', token);
           set({ 
             user: data.user, 
             token, 
@@ -75,7 +79,7 @@ export const useAuthStore = create<AuthState>()(
       },
 
       logout: () => {
-        localStorage.removeItem('wiz_token');
+        localStorage.removeItem('aureus_token');
         set({ 
           user: null, 
           token: null, 
@@ -84,7 +88,7 @@ export const useAuthStore = create<AuthState>()(
       },
 
       checkAuth: async () => {
-        const token = localStorage.getItem('wiz_token');
+        const token = localStorage.getItem('aureus_token');
         if (!token) return;
 
         set({ isLoading: true });
@@ -97,7 +101,7 @@ export const useAuthStore = create<AuthState>()(
             isLoading: false 
           });
         } catch (error) {
-          localStorage.removeItem('wiz_token');
+          localStorage.removeItem('aureus_token');
           set({ 
             user: null, 
             token: null, 
@@ -106,10 +110,18 @@ export const useAuthStore = create<AuthState>()(
           });
         }
       },
+
+      toggleBalanceVisibility: () => {
+        set((state) => ({ showBalance: !state.showBalance }));
+      },
     }),
     {
-      name: 'wiz-auth-storage',
-      partialize: (state) => ({ token: state.token, isAuthenticated: state.isAuthenticated }),
+      name: 'aureus-auth-storage',
+      partialize: (state) => ({ 
+        token: state.token, 
+        isAuthenticated: state.isAuthenticated,
+        showBalance: state.showBalance 
+      }),
     }
   )
 );

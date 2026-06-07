@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { ChevronDown, TrendingDown, TrendingUp } from "lucide-react";
 
 const categories = [
-  { name: "Shopping", amount: "1,240.00", percentage: 45, color: "bg-wise-green" },
+  { name: "Shopping", amount: "1,240.00", percentage: 45, color: "bg-amber-500" },
   { name: "Travel", amount: "850.20", percentage: 30, color: "bg-near-black" },
   { name: "Food & Drink", amount: "420.50", percentage: 15, color: "bg-muted" },
   { name: "Utilities", amount: "210.00", percentage: 10, color: "bg-border" },
@@ -95,7 +95,7 @@ export default function AnalyticsPage() {
           </div>
 
           <div className="space-y-4">
-            <h2 className="font-section text-5xl md:text-7xl tracking-tighter leading-none">Smart data <br/><span className="text-wise-green">smarter you.</span></h2>
+            <h2 className="font-section text-5xl md:text-7xl tracking-tighter leading-none">Smart data <br/><span className="text-amber-500">smarter you.</span></h2>
             <p className="text-xl text-muted font-bold max-w-md mx-auto leading-relaxed">
               We're crunching the numbers to give you insights that actually matter. Better decisions start here.
             </p>

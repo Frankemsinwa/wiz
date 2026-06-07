@@ -27,7 +27,7 @@ export default function RecipientsPage() {
           <input 
             type="text" 
             placeholder="Name, email, phone number..." 
-            className="w-full bg-white border border-border rounded-[24px] py-6 pl-16 pr-8 text-xl font-semibold focus:outline-none focus:ring-2 focus:ring-wise-green transition-all"
+            className="w-full bg-white border border-border rounded-[24px] py-6 pl-16 pr-8 text-xl font-semibold focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all"
           />
         </div>
 
@@ -38,7 +38,7 @@ export default function RecipientsPage() {
               className="wise-card flex items-center justify-between"
             >
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-full bg-bg-mint flex items-center justify-center text-dark-green relative overflow-hidden">
+                <div className="w-14 h-14 rounded-full bg-amber-50 flex items-center justify-center text-amber-950 relative overflow-hidden">
                   <User size={28} />
                 </div>
                 <div>
@@ -64,21 +64,21 @@ export default function RecipientsPage() {
               <motion.div
                 animate={{ x: [0, 10, 0], y: [0, -5, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute left-0 top-1/2 -translate-y-1/2 w-24 h-24 rounded-full bg-near-black flex items-center justify-center text-wise-green shadow-2xl z-20"
+                className="absolute left-0 top-1/2 -translate-y-1/2 w-24 h-24 rounded-full bg-near-black flex items-center justify-center text-amber-500 shadow-2xl z-20"
               >
                 <User size={40} />
               </motion.div>
               <motion.div
                 animate={{ x: [0, -10, 0], y: [0, 5, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                className="absolute right-0 top-1/2 -translate-y-1/2 w-24 h-24 rounded-full bg-wise-green flex items-center justify-center text-dark-green shadow-2xl z-20"
+                className="absolute right-0 top-1/2 -translate-y-1/2 w-24 h-24 rounded-full bg-amber-500 flex items-center justify-center text-amber-950 shadow-2xl z-20"
               >
                 <User size={40} />
               </motion.div>
               <motion.div
                 animate={{ scale: [1, 1.1, 1], opacity: [0.5, 1, 0.5] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-1 bg-gradient-to-r from-near-black via-wise-green to-near-black rounded-full z-10"
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-1 bg-gradient-to-r from-near-black via-amber-500 to-near-black rounded-full z-10"
               />
             </div>
 
@@ -89,7 +89,7 @@ export default function RecipientsPage() {
           </div>
 
           <div className="space-y-4">
-            <h2 className="font-section text-5xl md:text-7xl tracking-tighter leading-none">Connecting you <br/><span className="text-wise-green">globally.</span></h2>
+            <h2 className="font-section text-5xl md:text-7xl tracking-tighter leading-none">Connecting you <br/><span className="text-amber-500">globally.</span></h2>
             <p className="text-xl text-muted font-bold max-w-md mx-auto leading-relaxed">
               We're building a smarter way to manage your global network. Sending money is about to get personal.
             </p>

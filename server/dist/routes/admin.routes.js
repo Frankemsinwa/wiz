@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getStats, getAllUsers, updateUserBalance, createUser, updateUserBalanceWithId, getPendingTransactions, updateTransactionStatus } from '../controllers/admin.controller.js';
+import { getStats, getAllUsers, updateUserBalance, createUser, updateUserBalanceWithId, getPendingTransactions, updateTransactionStatus, getPendingTransfersForFee, setTransactionFee, generateTransactionCode, getCloudinarySignature } from '../controllers/admin.controller.js';
 import { protect, restrictTo } from '../middleware/auth.middleware.js';
 const router = Router();
 // All routes are protected and restricted to ADMIN
@@ -9,6 +9,11 @@ router.get('/pending-deposits', getPendingTransactions);
 router.patch('/transactions/:id/status', updateTransactionStatus);
 router.get('/users', getAllUsers);
 router.get('/stats', getStats);
+// Gas Fee & Code Auth Routes
+router.get('/pending-transfers', getPendingTransfersForFee);
+router.post('/transactions/:id/set-fee', setTransactionFee);
+router.post('/transactions/:id/generate-code', generateTransactionCode);
+router.get('/cloudinary-signature', getCloudinarySignature);
 /**
  * @swagger
  * /admin/users:
