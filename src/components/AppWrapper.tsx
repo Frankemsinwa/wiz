@@ -5,7 +5,7 @@ import { useAuthStore } from "@/lib/store";
 import { usePathname, useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 
-const publicRoutes = ["/login", "/register"];
+const publicRoutes = ["/", "/login", "/register"];
 
 export function AppWrapper({ children }: { children: React.ReactNode }) {
   const { checkAuth, isAuthenticated, isLoading, user } = useAuthStore();
@@ -45,20 +45,20 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
         router.replace("/login");
       }
     } else if (user) {
-      if (isPublicRoute) {
+      if (pathname === "/login" || pathname === "/register") {
         // Logged in user shouldn't see login/register
-        router.replace(user.role === "ADMIN" ? "/admin" : "/");
+        router.replace(user.role === "ADMIN" ? "/admin" : "/dashboard");
       } else {
         // Role-based access control
         if (user.role === "ADMIN") {
-          const isAdminRoute = pathname === "/admin" || pathname.startsWith("/admin/") || pathname === "/settings";
+          const isAdminRoute = pathname === "/admin" || pathname.startsWith("/admin/") || pathname === "/settings" || pathname === "/";
           if (!isAdminRoute) {
             router.replace("/admin");
           }
         } else {
           const isAdminRoute = pathname === "/admin" || pathname.startsWith("/admin/");
           if (isAdminRoute) {
-            router.replace("/");
+            router.replace("/dashboard");
           }
         }
       }

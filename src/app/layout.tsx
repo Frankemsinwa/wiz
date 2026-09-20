@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Sidebar from "@/components/Sidebar";
-import MobileHeader from "@/components/MobileHeader";
 import { AppWrapper } from "@/components/AppWrapper";
-import ChatFAB from "@/components/ChatFAB";
+import MainLayout from "@/components/MainLayout";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -12,8 +10,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Aureus | Money without borders",
-  description: "Personal multi-currency bank account",
+  title: "Aureus | Modern Financial Cloud & Multi-Currency Banking",
+  description: "Next-generation institutional-grade multi-currency banking platform, treasury management, and corporate cards.",
 };
 
 export default function RootLayout({
@@ -29,16 +27,9 @@ export default function RootLayout({
     >
       <body className="min-h-full bg-bg-page text-near-black">
         <AppWrapper>
-          <div className="flex flex-col md:flex-row min-h-screen">
-            <Sidebar />
-            <div className="flex-1 flex flex-col">
-              <MobileHeader />
-              <main className="flex-1 overflow-y-auto pb-24 md:pb-0">
-                {children}
-              </main>
-            </div>
-            <ChatFAB />
-          </div>
+          <MainLayout>
+            {children}
+          </MainLayout>
         </AppWrapper>
       </body>
     </html>

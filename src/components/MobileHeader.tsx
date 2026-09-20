@@ -13,7 +13,7 @@ export default function MobileHeader() {
 
   return (
     <header className="md:hidden flex items-center justify-between p-6 bg-bg-page sticky top-0 z-40">
-      <Link href="/" className="flex items-center gap-2">
+      <Link href="/dashboard" className="flex items-center gap-2">
         <img src="/logo.png" alt="Aureus" className="h-8 w-auto" />
         <span className="text-near-black text-3xl font-black tracking-tighter">Aureus.</span>
       </Link>

@@ -21,7 +21,7 @@ export default function Sidebar() {
   };
 
   const workerItems = [
-    { icon: Home, label: "Home", href: "/" },
+    { icon: Home, label: "Dashboard", href: "/dashboard" },
     { icon: ArrowLeftRight, label: "Send", href: "/transfers" },
     { icon: ArrowDownLeft, label: "Receive", href: "/receive" },
     { icon: MessageSquare, label: "Messages", href: "/messages" },

@@ -306,7 +306,7 @@ export default function TransfersPage() {
             } else if (step === "crypto-form") {
               setStep("international-channels");
             } else {
-              router.push("/");
+              router.push("/dashboard");
             }
           }}
           className="flex items-center gap-2 text-muted font-bold hover:text-near-black mb-8 transition-colors self-start cursor-pointer"
@@ -1098,7 +1098,7 @@ export default function TransfersPage() {
                     Send Another
                   </button>
                   <Link
-                    href="/"
+                    href="/dashboard"
                     className="flex-1 py-4 text-base font-black bg-near-black text-white hover:bg-black rounded-xl text-center flex items-center justify-center transition-all cursor-pointer"
                   >
                     Go to Dashboard
