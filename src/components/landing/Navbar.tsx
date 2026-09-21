@@ -21,8 +21,8 @@ export default function Navbar() {
 
   const navLinks = [
     { label: "Personal", href: "#features" },
-    { label: "Business", href: "#features" },
-    { label: "Multi-Currency", href: "#services" },
+    { label: "Services", href: "#services" },
+    { label: "Yield Simulator", href: "#simulator" },
     { label: "Transfers", href: "#payments" },
     { label: "Security", href: "#security" },
     { label: "About Us", href: "#about" },
